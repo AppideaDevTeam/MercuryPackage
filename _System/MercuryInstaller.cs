@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,9 +47,13 @@ namespace Mercury
 
             AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<T>(), fullPath);
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
-        
-        static MercuryInstaller() => CreateScriptableObject<MercuryLibrarySO>();
+
+        static MercuryInstaller()
+        {
+            CreateScriptableObject<MercuryLibrarySO>();
+        }
     }
 }
 #endif

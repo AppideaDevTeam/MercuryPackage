@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sirenix.OdinInspector.Editor;
@@ -55,8 +56,14 @@ namespace Mercury
 
         private static void AddtoHierarchy<T>(OdinMenuTree tree, string _path, string _base64Sprite = "") where T : UnityEngine.Object
         {
-
             var allAssetsOfTypeT = LoadAndReturnAll<T>();
+
+            if (allAssetsOfTypeT == null)
+            {
+                MercuryInstaller.CreateScriptableObject<MercuryLibrarySO>();
+                Debug.LogWarning("MecruryLibrarySO was not present, so it has been created an try opening Setup Window Again");
+                return;
+            }
         
             foreach (var item in allAssetsOfTypeT )
             {
