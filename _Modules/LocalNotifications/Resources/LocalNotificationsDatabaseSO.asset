@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4066eb37514a987479dffab8a448e172, type: 3}
+  m_Name: LocalNotificationsDatabaseSO
+  m_EditorClassIdentifier: 
+  DebuggingEnabled: 1
+  QuietHoursEnabled: 1
+  QuietHoursAffectOnCustomsEnabled: 1
+  RemindersEnabled: 1
+  PeriodicRewardsEnabled: 0
+  FreeResourcesEnabled: 0
+  ProcessesEnabled: 0
+  EnemyConnectedEnabled: 0
+  RedirectAllToDefaultChannel: 1
+  Channel_Default:
+    Enabled: 1
+    ID: default
+    Name: Default Channel
+    Description: Default channel
+  Channel_Reminders:
+    Enabled: 1
+    ID: reminders
+    Name: Reminders
+    Description: Reminder notifications
+  Channel_PeriodicRewards:
+    Enabled: 1
+    ID: periodic_rewards
+    Name: Periodic Rewards
+    Description: Periodic rewards notifications
+  Channel_FreeResources:
+    Enabled: 1
+    ID: free_resources
+    Name: Free Resources
+    Description: Free resources notifications
+  Channel_Processes:
+    Enabled: 1
+    ID: processes
+    Name: Processes
+    Description: Processes notifications
+  Channel_EnemyConnected:
+    Enabled: 1
+    ID: enemy_connected
+    Name: Enemy Connected
+    Description: Enemy connected notifications
+  Channels_Custom: []
+  QuietHoursRandomOffsetRange: 30
+  StartRemindingInDays: 2
+  RemindDurationInDays: 14
+  DifferentOnWeekends: 0
+  ReminderHoursWorkdays: []
+  ReminderHoursWeekends: []
+  FreeResourcesSpamPreventionEnabled: 0
+  FreeResourcesSpamPreventionThresholdMinutes: 10
+  StartEnemyConnectedNotificationsInHours: 4
+  EnemyConnectedNotificationsPerDay: 2
+  EnemyConnectedNotificationsFromHour: 9
+  EnemyConnectedNotificationsToHour: 23
+  reminderTexts: []
+  periodicRewardsTexts:
+  - Period: 
+    EditorData:
+      iconSmall: 
+      iconLarge: 
+  freeResourcesTexts: []
+  processesTexts: []
+  enemyConnectedText:
+    EditorData:
+      iconSmall: 
+      iconLarge: 

@@ -1,0 +1,25 @@
+{
+  "name": "com.mercury.mercury.modules",
+  "version": "1.0.0",
+  "displayName": "Mercury",
+  "description": "Mercury system with modules",
+  "unity": "2020.3",
+  "unityRelease": "8f1",
+  "documentationUrl": "https://example.com/",
+  "changelogUrl": "https://example.com/changelog.html",
+  "licensesUrl": "https://example.com/licensing.html",
+  "dependencies": {
+    "com.unity.mobile.notifications": "1.3.2"
+  },
+  "keywords": [
+    "Mercury",
+    "Modules"
+  ],
+  "author": {
+    "name": "Mercury",
+    "email": "maroon3d@gmail.com",
+    "url": "https://www.unity3d.com"
+  },
+  "type": "library",
+  "hideInEditor": false
+}
