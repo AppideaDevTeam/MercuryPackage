@@ -10,7 +10,7 @@ namespace Mercury.LocalNotifications
 
         public void Initialize()
         {
-            LocalNotificationManager.Initialize();
+            LocalNotificationsManager.Initialize();
         }
 
         public void RescheduleAll()
@@ -21,14 +21,14 @@ namespace Mercury.LocalNotifications
 
         public void CancelAllNotifications()
         {
-            LocalNotificationManager.CancelAllNotifications();
-            LocalNotificationManager.LogMessage("All notifications canceled");
+            LocalNotificationsManager.CancelAllNotifications();
+            LocalNotificationsManager.LogMessage("All notifications canceled");
         }
 
         public string AppWasLaunchedViaNotificationChannel()
         {
-            string channel = LocalNotificationManager.AppWasLaunchedViaNotificationChannel();
-            LocalNotificationManager.LogMessage($"Application was launched via channel: {channel}");
+            string channel = LocalNotificationsManager.AppWasLaunchedViaNotificationChannel();
+            LocalNotificationsManager.LogMessage($"Application was launched via channel: {channel}");
             return channel;
         }
 
@@ -47,39 +47,39 @@ namespace Mercury.LocalNotifications
         {
             // CUSTOM
             var customNotifs = Instance.RescheduleCustomNotifications();
-            if (!customNotifs.IsNullOrEmpty()) LocalNotificationManager.ScheduleCustomNotifications(customNotifs);
+            if (!customNotifs.IsNullOrEmpty()) LocalNotificationsManager.ScheduleCustomNotifications(customNotifs);
             
             // PERIODIC
             var periodicNotifs = Instance.GetPeriodicNotifications();
             if (MercuryLibrarySO.LocalNotificationsDatabase.PeriodicRewardsEnabled && !periodicNotifs.IsNullOrEmpty()) 
-            LocalNotificationManager.SchedulePeriodicNotifications(periodicNotifs);
+            LocalNotificationsManager.SchedulePeriodicNotifications(periodicNotifs);
  
             // FREE RESOURCES
             var freeResNotifs = Instance.GetFreeResourcesNotifications(); 
             if (MercuryLibrarySO.LocalNotificationsDatabase.FreeResourcesEnabled && !freeResNotifs.IsNullOrEmpty()) 
-            LocalNotificationManager.ScheduleFreeResourcesNotifications(freeResNotifs);
+            LocalNotificationsManager.ScheduleFreeResourcesNotifications(freeResNotifs);
             
             // PROCESSES
             var procNotifs = Instance.GetProcessesNotifications();
             if (MercuryLibrarySO.LocalNotificationsDatabase.ProcessesEnabled && !procNotifs.IsNullOrEmpty()) 
-            LocalNotificationManager.ScheduleProcessesNotifications(procNotifs);
+            LocalNotificationsManager.ScheduleProcessesNotifications(procNotifs);
             
             // ENEMY CONNECTED
             var enemyNotifs = Instance.GetEnemyConnectedNotifications();
             if (MercuryLibrarySO.LocalNotificationsDatabase.EnemyConnectedEnabled && !enemyNotifs.IsNullOrEmpty()) 
-            LocalNotificationManager.ScheduleEnemyConnectedNotifications(enemyNotifs);
+            LocalNotificationsManager.ScheduleEnemyConnectedNotifications(enemyNotifs);
             
             // REMAINDERS
             if (MercuryLibrarySO.LocalNotificationsDatabase.RemindersEnabled) 
-            LocalNotificationManager.ScheduleRemainderNotifications();
+            LocalNotificationsManager.ScheduleRemainderNotifications();
             
-            LocalNotificationManager.LogMessage("All notifications rescheduled");
+            LocalNotificationsManager.LogMessage("All notifications rescheduled");
         }
         
         #region APPLICATION FOCUS
         private void OnApplicationFocus(bool focus)
         {
-            if (!focus && LocalNotificationManager.IsInitialized) RescheduleAll();
+            if (!focus && LocalNotificationsManager.IsInitialized) RescheduleAll();
         }
         #endregion
     }
