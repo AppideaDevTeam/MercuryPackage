@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Mercury.LocalNotifications
 {
-    public class LocalNotificationsDatabaseSO : MercurySingletonScriptableObject<LocalNotificationsDatabaseSO>
+    public class LocalNotificationsDatabaseSO : ScriptableObject
     {
         #region ELEMENTS
         // GLOBAL SETTINGS

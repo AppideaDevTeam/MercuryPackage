@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Mercury.InternetConnectivity;
+using Mercury.LocalNotifications;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -11,13 +14,25 @@ namespace Mercury
     {
         private   static MercurySetupWindow instance;
 
-        [MenuItem("Tools/Mercury Setup ֎ %M")]
+        [MenuItem("Tools/Mercury ֎/Mercury Setup ֎ %M", priority = 0)]
         public static void OpenWindow()
         {
             instance = GetWindow<MercurySetupWindow>();
             instance.Show();
         }
-
+        
+        #region CREATE DATABASES
+        #if MERCURY_LOCALNOTIFICATIONS
+        [MenuItem("Tools/Mercury ֎/Create Database/Local Notifications")]
+        public static void CreateLocalNotificationDatabase() => MercuryInstaller.CreateScriptableObject<LocalNotificationsDatabaseSO>();
+        #endif
+        
+        #if MERCURY_INTERNETCONNECTIVITY
+        [MenuItem("Tools/Mercury ֎/Create Database/Internet Connectivity")]
+        public static void CreateInternetConnectivityDatabase() => MercuryInstaller.CreateScriptableObject<InternetConnectivityDatabaseSO>();
+        #endif
+        #endregion
+        
         protected override void OnDestroy()
         {
             base.OnDestroy();

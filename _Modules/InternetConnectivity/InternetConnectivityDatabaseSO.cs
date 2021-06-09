@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Mercury.InternetConnectivity
 {
-    public class InternetConnectivityDatabaseSO : MercurySingletonScriptableObject<InternetConnectivityDatabaseSO>
+    public class InternetConnectivityDatabaseSO : ScriptableObject
     {
         [ShowInInspector, TitleGroup("Ping"), TableList(AlwaysExpanded = true), HideLabel] public List<PingEntryEditor> PingEntries = new List<PingEntryEditor>
         {
