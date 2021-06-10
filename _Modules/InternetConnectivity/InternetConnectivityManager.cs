@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using UnityEngine;
 using Ping = System.Net.NetworkInformation.Ping;
@@ -35,9 +37,7 @@ namespace Mercury.InternetConnectivity
 
             foreach (TimeServerEntryEditor timeServerEntryEditor in Database.TimeServerEntries)
             {
-                var targetServerAddress = timeServerEntryEditor.GetTargetServerAddress();
-                
-                TimeServerEntries.Add(new TimeServerEntry(targetServerAddress));
+                TimeServerEntries.Add(new TimeServerEntry(timeServerEntryEditor.HostName));
             }
         }
 
@@ -102,7 +102,7 @@ namespace Mercury.InternetConnectivity
             }
             catch
             {
-                Debug.Log($"Failed to ping IP address: {_ip}");
+                LogMessage($"Failed to ping IP address: {_ip}");
             }
 
             return status;
@@ -120,7 +120,9 @@ namespace Mercury.InternetConnectivity
 
                 tasks[index] = Task.Run(() =>
                 {
-                    TimeServerStatus status = GetLocalDateTimeFromServer(TimeServerEntries[threadSafeIndex].ServerAddress);
+                    var entry = TimeServerEntries[threadSafeIndex];
+                    
+                    TimeServerStatus status = GetLocalDateTimeFromServer(entry.HostName);
 
                     TimeServerEntries[threadSafeIndex].Status = status;
                 });
@@ -138,33 +140,54 @@ namespace Mercury.InternetConnectivity
 
             return new TimeServerStatus(false, DateTime.MaxValue);
         }
-        
-        internal static TimeServerStatus GetLocalDateTimeFromServer(string _serverAddress)
+
+        internal static DateTime ParseTimeServerResponse(string _response)
+        {
+            DateTime result = new DateTime();
+
+            int year = int.Parse(_response.Substring(7, 2));
+            int month = int.Parse(_response.Substring(10, 2));
+            int day = int.Parse(_response.Substring(13, 2));
+            
+            int hour = int.Parse(_response.Substring(16, 2));
+            int minute = int.Parse(_response.Substring(19, 2));
+            int second = int.Parse(_response.Substring(22, 2));
+            
+            result = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc).ToLocalTime();
+            
+            return result;
+        }
+
+        internal static TimeServerStatus GetLocalDateTimeFromServer(string _hostName)
         {
             TimeServerStatus status = new TimeServerStatus(false, DateTime.MaxValue);
             
             try
             {
-                TcpClient tcpClient = new TcpClient(_serverAddress, 13);
+                TcpClient tcpClient = new TcpClient(_hostName, 13);
 
                 using StreamReader streamReader = new StreamReader(tcpClient.GetStream());
-                
-                string responseString = streamReader.ReadToEnd();
 
-                string responseDateTime = responseString.Substring(7, 17);
-            
-                DateTime localDateTime = DateTime.ParseExact(responseDateTime, "yy-MM-dd hh:mm:ss", CultureInfo.InvariantCulture,
-                                                             DateTimeStyles.AssumeUniversal);
+                string responseString = streamReader.ReadToEnd();
+                
+                DateTime localDateTime = ParseTimeServerResponse(responseString);
 
                 status.Success       = true;
                 status.LocalDateTime = localDateTime;
             }
-            catch (Exception exception)
+            catch
             {
-                Debug.Log($"Failed to fetch time from server with address: {_serverAddress}");
+                LogMessage($"Failed to fetch time from server with address: {_hostName}");
             }
 
             return status;
+        }
+        #endregion
+        
+        #region DEBUG
+        public static void LogMessage(string _message)
+        {
+            if (Database.DebuggingEnabled) MercuryDebugger.LogMessage(LogModule.InternetConnectivity, _message);
         }
         #endregion
     }
@@ -198,12 +221,12 @@ namespace Mercury.InternetConnectivity
 
     public class TimeServerEntry
     {
-        public string           ServerAddress;
+        public string           HostName;
         public TimeServerStatus Status;
 
-        public TimeServerEntry(string _serverAddress)
+        public TimeServerEntry(string _hostName)
         {
-            ServerAddress = _serverAddress;
+            HostName = _hostName;
             Status = new TimeServerStatus(false, DateTime.MaxValue);
         }
     }
