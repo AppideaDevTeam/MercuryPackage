@@ -1,7 +1,10 @@
 #if MERCURY_INTERNETCONNECTIVITY
-
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
 using Ping = System.Net.NetworkInformation.Ping;
@@ -12,6 +15,7 @@ namespace Mercury.InternetConnectivity
     {
         #region VARIABLES
         private static List<PingEntry> PingEntries;
+        private static List<TimeServerEntry> TimeServerEntries;
 
         public static bool InternetConnectionEstablished { get; private set; }
 
@@ -26,6 +30,15 @@ namespace Mercury.InternetConnectivity
 
             foreach (PingEntryEditor pingEntryEditor in Database.PingEntries)
                 PingEntries.Add(new PingEntry(pingEntryEditor.IPAddress));
+            
+            TimeServerEntries = new List<TimeServerEntry>();
+
+            foreach (TimeServerEntryEditor timeServerEntryEditor in Database.TimeServerEntries)
+            {
+                var targetServerAddress = timeServerEntryEditor.GetTargetServerAddress();
+                
+                TimeServerEntries.Add(new TimeServerEntry(targetServerAddress));
+            }
         }
 
         public static bool CheckInternetConnection()
@@ -39,6 +52,7 @@ namespace Mercury.InternetConnectivity
             return InternetConnectionEstablished;
         }
         
+        #region PING
         private static bool PingAll()
         {
             // STORE PING TIME
@@ -93,6 +107,66 @@ namespace Mercury.InternetConnectivity
 
             return status;
         }
+        #endregion
+
+        #region TIME
+        public static TimeServerStatus GetLocalDateTime()
+        {
+            var tasks = new Task[Database.TimeServerEntries.Count];
+            
+            for (var index = 0; index < tasks.Length; index++)
+            {
+                var threadSafeIndex = index;
+
+                tasks[index] = Task.Run(() =>
+                {
+                    TimeServerStatus status = GetLocalDateTimeFromServer(TimeServerEntries[threadSafeIndex].ServerAddress);
+
+                    TimeServerEntries[threadSafeIndex].Status = status;
+                });
+            }
+
+            // WAIT FOR FIRST COMPLETED TASK AND CHECK FOR SUCCESS
+            for (var index = 0; index < tasks.Length; index++)
+            {
+                Task.WaitAny(tasks);
+
+                TimeServerEntry entry = TimeServerEntries[index]; 
+                
+                if (entry.Status.Success) return entry.Status;
+            }
+
+            return new TimeServerStatus(false, DateTime.MaxValue);
+        }
+        
+        internal static TimeServerStatus GetLocalDateTimeFromServer(string _serverAddress)
+        {
+            TimeServerStatus status = new TimeServerStatus(false, DateTime.MaxValue);
+            
+            try
+            {
+                TcpClient tcpClient = new TcpClient(_serverAddress, 13);
+
+                using StreamReader streamReader = new StreamReader(tcpClient.GetStream());
+                
+                string responseString = streamReader.ReadToEnd();
+
+                string responseDateTime = responseString.Substring(7, 17);
+            
+                DateTime localDateTime = DateTime.ParseExact(responseDateTime, "yy-MM-dd hh:mm:ss", CultureInfo.InvariantCulture,
+                                                             DateTimeStyles.AssumeUniversal);
+
+                status.Success       = true;
+                status.LocalDateTime = localDateTime;
+            }
+            catch (Exception exception)
+            {
+                Debug.Log($"Failed to fetch time from server with address: {_serverAddress}");
+            }
+
+            return status;
+        }
+        #endregion
     }
     
     #region DATA CLASSES
@@ -102,7 +176,11 @@ namespace Mercury.InternetConnectivity
         public readonly string     IPAddress;
         public          PingStatus Status;
 
-        public PingEntry(string _ipAddress) { IPAddress = _ipAddress; }
+        public PingEntry(string _ipAddress)
+        {
+            IPAddress = _ipAddress;
+            Status = new PingStatus(false, int.MaxValue);
+        }
     }
     
     
@@ -115,6 +193,30 @@ namespace Mercury.InternetConnectivity
         {
             Success = _success;
             Delay   = _delay;
+        }
+    }
+
+    public class TimeServerEntry
+    {
+        public string           ServerAddress;
+        public TimeServerStatus Status;
+
+        public TimeServerEntry(string _serverAddress)
+        {
+            ServerAddress = _serverAddress;
+            Status = new TimeServerStatus(false, DateTime.MaxValue);
+        }
+    }
+
+    public class TimeServerStatus
+    {
+        public bool     Success;
+        public DateTime LocalDateTime;
+
+        public TimeServerStatus(bool _success, DateTime _localDateTime)
+        {
+            Success = _success;
+            LocalDateTime = _localDateTime;
         }
     }
     #endregion

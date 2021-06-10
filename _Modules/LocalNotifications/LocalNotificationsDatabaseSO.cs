@@ -2,7 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Sirenix.OdinInspector;
+using UnityEditor.Graphs;
 using UnityEngine;
 
 namespace Mercury.LocalNotifications
@@ -11,7 +13,7 @@ namespace Mercury.LocalNotifications
     {
         #region ELEMENTS
         // GLOBAL SETTINGS
-        [PropertyTooltip("Enable logging debug messages."), TitleGroup("Global Settings"), GUIColor(1f, 0.6f, 0f), LabelWidth(200)]
+        [PropertyTooltip("Enable logging debug messages."), TitleGroup("Global Settings"), GUIColor("@MercuryLibrarySO.Color_Orange"), LabelWidth(200)]
         public bool DebuggingEnabled;
         [PropertyTooltip("Quiet hours, Any notification at this time range will be shifted out."), TitleGroup("Global Settings"), BoxGroup("Global Settings/Quiet Hours"), LabelText("Enabled: "), LabelWidth(200)]
         public bool QuietHoursEnabled = true;
@@ -29,9 +31,9 @@ namespace Mercury.LocalNotifications
         public bool EnemyConnectedEnabled;
 
         // CHANNELS
-        [PropertyTooltip(""), TabGroup("Tabs", "Channels"), TitleGroup("Tabs/Channels/Settings"), GUIColor(1.0f, 0.4f, 1f), LabelText("Redirect All To Default Channel: "), LabelWidth(200)]
+        [PropertyTooltip(""), TabGroup("Tabs", "Channels"), TitleGroup("Tabs/Channels/Settings"), GUIColor("@MercuryLibrarySO.Color_Violet"), LabelText("Redirect All To Default Channel: "), LabelWidth(200)]
         public bool RedirectAllToDefaultChannel = true;
-        [PropertyTooltip(""), TabGroup("Tabs", "Channels"), TitleGroup("Tabs/Channels/Static Channels", "Android only"), GUIColor(1.0f, 0.4f, 1f), ReadOnly, LabelText("Default")]
+        [PropertyTooltip(""), TabGroup("Tabs", "Channels"), TitleGroup("Tabs/Channels/Static Channels", "Android only"), GUIColor("@MercuryLibrarySO.Color_Violet"), ReadOnly, LabelText("Default")]
         public NotificationChannel Channel_Default = new NotificationChannel(true, "default", "Default Channel", "Default channel");
         [PropertyTooltip(""), TabGroup("Tabs", "Channels"), TitleGroup("Tabs/Channels/Static Channels", "Android only"), ShowIf("@this.RemindersEnabled && !this.RedirectAllToDefaultChannel"), ReadOnly, LabelText("Reminders")]
         public NotificationChannel Channel_Reminders = new NotificationChannel(true, "reminders", "Reminders", "Reminder notifications");
@@ -103,7 +105,7 @@ namespace Mercury.LocalNotifications
     [Serializable]
     public class TimeRange
     {
-        [BoxGroup("Ranges", ShowLabel = false), GUIColor(1.0f, 0.4f, 1f), Title("$rangeString", "-24h, +24h", TitleAlignment = TitleAlignments.Centered, Bold = true)] [MinMaxSlider(-24, 24), HideLabel, ShowInInspector]
+        [BoxGroup("Ranges", ShowLabel = false), GUIColor("@MercuryLibrarySO.Color_Violet"), Title("$rangeString", "-24h, +24h", TitleAlignment = TitleAlignments.Centered, Bold = true)] [MinMaxSlider(-24, 24), HideLabel, ShowInInspector]
         private Vector2Int range = new Vector2Int(-2, 9);
         private string quietHourFromString => LocalNotificationsDatabaseSO.IntHourToTime(range.x);
         private string quietHourToString   => LocalNotificationsDatabaseSO.IntHourToTime(range.y);
@@ -165,11 +167,11 @@ namespace Mercury.LocalNotifications
     {
         [HorizontalGroup("Group"), TitleGroup("Group/Title Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TitleValueChanged")]
         public string titleBuffer;
-        [HorizontalGroup("Group"), TitleGroup("Group/Title Preview"), HideLabel, MultiLineProperty(3), ReadOnly, GUIColor(1.0f, 0.4f, 1f)]
+        [HorizontalGroup("Group"), TitleGroup("Group/Title Preview"), HideLabel, MultiLineProperty(3), ReadOnly, GUIColor("@MercuryLibrarySO.Color_Violet")]
         public string titlePreview;
         [HorizontalGroup("Group"), TitleGroup("Group/Text Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TextValueChanged")]
         public string textBuffer;
-        [HorizontalGroup("Group"), TitleGroup("Group/Text Preview"), HideLabel, MultiLineProperty(3), ReadOnly, GUIColor(1.0f, 0.4f, 1f)]
+        [HorizontalGroup("Group"), TitleGroup("Group/Text Preview"), HideLabel, MultiLineProperty(3), ReadOnly, GUIColor("@MercuryLibrarySO.Color_Violet")]
         public string textPreview;
         [HorizontalGroup("Group"), TitleGroup("Group/Icon Small"), HideLabel] public string iconSmall;
         [HorizontalGroup("Group"), TitleGroup("Group/Icon Large"), HideLabel] public string iconLarge;

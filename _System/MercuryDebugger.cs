@@ -21,7 +21,7 @@ namespace Mercury
         {
             string moduleText = "Mercury_" + _module;
             
-            Debug.Log($"<color={MercuryLibrarySO.MercuryUIColor}>[{moduleText}]</color> {_message}");
+            Debug.Log($"<color={MercuryLibrarySO.color_Violet}>[{moduleText}]</color> {_message}");
         }
     }
 }

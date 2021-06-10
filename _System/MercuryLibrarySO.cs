@@ -1,14 +1,27 @@
 using System;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Mercury
 {
     public class MercuryLibrarySO : MercurySingletonScriptableObject<MercuryLibrarySO>
     {
-        #region Simple Singleton Pattern with Hidden Instance
+        #region UI COLORS
 
-        public const string MercuryUIColor = "#ff66ff";
+        internal const string color_Violet = "#ff66ff";
+        internal const string color_Orange = "#ff9900";
+        
+        public static Color Color_Violet => ParseHexColorString(color_Violet);
+        public static Color Color_Orange => ParseHexColorString(color_Orange);
+        private static Color ParseHexColorString(string _hex)
+        {
+            ColorUtility.TryParseHtmlString(_hex, out Color color);
+            return color;
+        }
 
+        #endregion
+
+        #region VARIABLES
         public ModuleSetting Module_LocalNotifications = new ModuleSetting("Local Notifications", "MERCURY_LOCALNOTIFICATIONS");
         public ModuleSetting Module_InternetConnectivity = new ModuleSetting("Internet Connectivity", "MERCURY_INTERNETCONNECTIVITY");
         #endregion
@@ -16,7 +29,6 @@ namespace Mercury
         [Serializable]
         public class ModuleSetting
         {
-            public string abaShecvale = "asdada";
             [HorizontalGroup("Group", Width = 80), TitleGroup("Group/Activated"), HideLabel, OnInspectorInit("@Activated = ActivationStatusRequired()"), OnValueChanged("ActivationStatusChanged")] public bool Activated;
             [HorizontalGroup("Group", Width = 300), TitleGroup("Group/Name"), HideLabel, ReadOnly] public string Name;
             [HorizontalGroup("Group"), TitleGroup("Group/Definition"), HideLabel, ReadOnly, GUIColor(1,0.4f,1)] public string Definition;
