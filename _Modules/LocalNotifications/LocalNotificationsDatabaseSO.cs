@@ -163,20 +163,20 @@ namespace Mercury.LocalNotifications
     [Serializable]
     public class NotificationEditorData
     {
-        [HorizontalGroup("Group"), TitleGroup("Group/Title Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TitleValueChanged"), ShowInInspector]
-        private string titleBuffer;
-        [HorizontalGroup("Group"), TitleGroup("Group/Title Preview"), HideLabel, MultiLineProperty(3), ReadOnly, ShowInInspector, GUIColor(1.0f, 0.4f, 1f)]
-        private string titlePreview;
-        [HorizontalGroup("Group"), TitleGroup("Group/Text Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TextValueChanged"), ShowInInspector]
-        private string textBuffer;
-        [HorizontalGroup("Group"), TitleGroup("Group/Text Preview"), HideLabel, MultiLineProperty(3), ReadOnly, ShowInInspector, GUIColor(1.0f, 0.4f, 1f)]
-        private string textPreview;
+        [HorizontalGroup("Group"), TitleGroup("Group/Title Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TitleValueChanged")]
+        public string titleBuffer;
+        [HorizontalGroup("Group"), TitleGroup("Group/Title Preview"), HideLabel, MultiLineProperty(3), ReadOnly, GUIColor(1.0f, 0.4f, 1f)]
+        public string titlePreview;
+        [HorizontalGroup("Group"), TitleGroup("Group/Text Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TextValueChanged")]
+        public string textBuffer;
+        [HorizontalGroup("Group"), TitleGroup("Group/Text Preview"), HideLabel, MultiLineProperty(3), ReadOnly, GUIColor(1.0f, 0.4f, 1f)]
+        public string textPreview;
         [HorizontalGroup("Group"), TitleGroup("Group/Icon Small"), HideLabel] public string iconSmall;
         [HorizontalGroup("Group"), TitleGroup("Group/Icon Large"), HideLabel] public string iconLarge;
 
         public string Title => Uri.UnescapeDataString(titleBuffer);
         public string Text  => Uri.UnescapeDataString(textBuffer);
-
+        
         public void TitleValueChanged(string buffer)
         {
             titlePreview = buffer;
