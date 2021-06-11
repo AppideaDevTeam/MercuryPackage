@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Mercury
 {
-    public class MercuryLibrarySO : MercurySingletonScriptableObject<MercuryLibrarySO>
+    public class MercuryLibrarySO : MercuryScriptableObjectInstanceReferencer<MercuryLibrarySO>
     {
         #region UI COLORS
 

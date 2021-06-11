@@ -4,7 +4,7 @@ using Sirenix.Utilities;
 
 namespace Mercury.LocalNotifications
 {
-    public abstract class LocalNotificationsController : MercurySingletonMonoBehaviour<LocalNotificationsController>
+    public abstract class LocalNotificationsController : MercuryMonoBehaviorInstanceReferencer<LocalNotificationsController>
     {
         #region USER CALLS
 
