@@ -178,17 +178,31 @@ namespace Mercury.LocalNotifications
 
         public string Title => Uri.UnescapeDataString(titleBuffer);
         public string Text  => Uri.UnescapeDataString(textBuffer);
+
+        private string SafeEscapeDataString(string _text)
+        {
+            while (true)
+            {
+                string unescaped = Uri.UnescapeDataString(_text);
+
+                if (unescaped.Equals(_text)) break;
+
+                _text = unescaped;
+            }
+
+            return Uri.EscapeDataString(_text);
+        }
         
         public void TitleValueChanged(string buffer)
         {
             titlePreview = buffer;
-            titleBuffer  = Uri.EscapeDataString(buffer);
+            titleBuffer  = SafeEscapeDataString(buffer);
         }
 
         public void TextValueChanged(string buffer)
         {
             textPreview = buffer;
-            textBuffer  = Uri.EscapeDataString(buffer);
+            textBuffer  = SafeEscapeDataString(buffer);
         }
     }
 
