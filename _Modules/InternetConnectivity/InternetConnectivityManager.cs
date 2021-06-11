@@ -16,30 +16,50 @@ namespace Mercury.InternetConnectivity
 
         private static List<PingEntry>                PingEntries;
         private static List<TimeServerEntry>          TimeServerEntries;
-        public static  bool                           InternetConnectionEstablished { get; private set; }
         private static float                          LastPingTime;
+        
+        internal static TimeInfo TimeInfo { get; private set; }
+        internal static ConnectionInfo ConnectionInfo { get; private set; }
+        public static bool IsInitialized { get; private set; }
+        
         private static InternetConnectivityDatabaseSO Database => MercuryLibrarySO.InternetConnectivityDatabase;
 
         #endregion
 
         public static void Initialize()
         {
+            // INITIALIZATION GATE
+            if (IsInitialized) return;
+            
+            // PING
+            ConnectionInfo = new ConnectionInfo();
+            
             PingEntries = new List<PingEntry>();
 
             foreach (var pingEntryEditor in Database.PingEntries)
                 PingEntries.Add(new PingEntry(pingEntryEditor.IPAddress));
 
+            // TIME
+            TimeInfo = new TimeInfo();
+            
             TimeServerEntries = new List<TimeServerEntry>();
 
             foreach (var timeServerEntryEditor in Database.TimeServerEntries) TimeServerEntries.Add(new TimeServerEntry(timeServerEntryEditor.HostName));
+
+            IsInitialized = true;
         }
 
-        public static bool CheckInternetConnection()
+        public static void CheckInternetConnection()
         {
-            // Ppreventin pinging abuse
-            if (1000 * (Time.realtimeSinceStartup - LastPingTime) > Database.PingGateInMilliseconds) InternetConnectionEstablished = PingAll();
-
-            return InternetConnectionEstablished;
+            // Preventin pinging abuse
+            if (1000 * (Time.realtimeSinceStartup - LastPingTime) > Database.PingGateInMilliseconds)
+            {
+                bool status = PingAll();
+                ConnectionInfo.CurrentlyConnected = status;
+                
+                // IF RETRY
+                if (status) ConnectionInfo.ConnectionEstablished = true;
+            }
         }
 
         #region PING
@@ -83,7 +103,7 @@ namespace Mercury.InternetConnectivity
             try
             {
                 var ping  = new Ping();
-                var reply = ping.Send(_ip, Database.PingTimeoutMilliseconds);
+                var reply = ping.Send(_ip, (int)Database.PingTimeoutMilliseconds);
 
                 if (reply.Status == IPStatus.Success)
                 {
@@ -146,11 +166,11 @@ namespace Mercury.InternetConnectivity
             var minute = int.Parse(_response.Substring(19, 2));
             var second = int.Parse(_response.Substring(22, 2));
 
-            result = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc).ToLocalTime();
+            result = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Unspecified).ToLocalTime();
 
             return result;
         }
-
+        
         internal static TimeServerStatus GetLocalDateTimeFromServer(string _hostName)
         {
             var status = new TimeServerStatus(false, DateTime.MaxValue);
@@ -176,6 +196,21 @@ namespace Mercury.InternetConnectivity
             return status;
         }
 
+        internal static void FetchInternetTime()
+        {
+            var timeServerStatus = GetLocalDateTime();
+            TimeInfo.WasFetched = timeServerStatus.Success;
+            TimeInfo.DateTime = timeServerStatus.LocalDateTime;
+            TimeInfo.LastFetchTime = Time.realtimeSinceStartup;
+        }
+        
+        internal static DateTime CalculateCurrentTime()
+        {
+            if (!TimeInfo.WasFetched) return DateTime.Now;
+        
+            TimeSpan deltaTime = TimeSpan.FromSeconds(Time.realtimeSinceStartup - TimeInfo.LastFetchTime);
+            return TimeInfo.DateTime.Add(deltaTime);
+        }
         #endregion
 
         #region DEBUG
@@ -237,7 +272,21 @@ namespace Mercury.InternetConnectivity
             LocalDateTime = _localDateTime;
         }
     }
-
+    
+    [Serializable]
+    public class TimeInfo
+    {
+        public bool     WasFetched;
+        public float    LastFetchTime;
+        public DateTime DateTime;
+    }
+    
+    [Serializable]
+    public class ConnectionInfo
+    {
+        public bool ConnectionEstablished;
+        public bool CurrentlyConnected;
+    }
     #endregion
 }
 #endif

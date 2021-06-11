@@ -22,12 +22,14 @@ namespace Mercury.LocalNotifications
         #region MAIN FUNCTIONS
         public static void Initialize()
         {
+            if (IsInitialized) return;
+            
             #if UNITY_ANDROID
             _platformManager = new LocalNotificationsManagerAndroid();
             #elif UNITY_IOS
             _platformManager = new LocalNotificationManager_iOS();
             #else
-            throw new NotImplementedException("Notifications for current platform are not supported.");
+            LogMessage("Notifications for current platform are not supported.", LogType.Exception);
             #endif
 
             _platformManager.Initialize();
@@ -413,11 +415,10 @@ namespace Mercury.LocalNotifications
         #endregion
 
         #region DEBUG
-        public static void LogMessage(string _message)
+        public static void LogMessage(string _message, LogType _logType = LogType.Info)
         {
-            if (Database.DebuggingEnabled) MercuryDebugger.LogMessage(LogModule.LocalNotifications, _message);
+            if (Database.DebuggingEnabled) MercuryDebugger.LogMessage(LogModule.LocalNotifications, _message, _logType);
         }
-
         #endregion
     }
     

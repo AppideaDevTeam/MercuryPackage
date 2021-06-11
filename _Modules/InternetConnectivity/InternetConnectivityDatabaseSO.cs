@@ -21,9 +21,25 @@ namespace Mercury.InternetConnectivity
         };
 
         [TitleGroup("Ping Settings"), LabelWidth(200), InfoBox("This field will used to prevent abusing servers with ping requests.", InfoMessageType.Warning)] 
-        public int PingGateInMilliseconds = 800;
+        public uint PingGateInMilliseconds = 800;
         [TitleGroup("Ping Settings"), LabelWidth(200)] 
-        public int PingTimeoutMilliseconds          = 1000;
+        public uint PingTimeoutMilliseconds          = 1000;
+
+        [TitleGroup("Internet Connection System"), LabelText("Connection Checking in Loop:"), LabelWidth(200)]
+        public bool InternetConnectionCheckingInLoop = true;
+        [TitleGroup("Internet Connection System"), LabelText("Auto Retry on Establish Fail:"), LabelWidth(200)]
+        public bool InternetConnectionAutoRetryOnFail = true;
+        [TitleGroup("Internet Connection System"), ShowIf("InternetConnectionCheckingInLoop"), LabelText("Auto Retry on Lost:"), LabelWidth(200)]
+        public bool InternetConnectionAutoRetryOnLost = true;
+        [TitleGroup("Internet Connection System"), LabelText("Maximum Auto Retry:"), LabelWidth(200)]
+        public uint InternetConnectionMaxAutoRetry = 4;
+        [TitleGroup("Internet Connection System"), ShowIf("InternetConnectionCheckingInLoop"), LabelText("Connection Loop Interval:"), LabelWidth(200)]
+        public uint InternetConnectionCheckingLoopInterval = 5;
+
+        [TitleGroup("Time Settings"), LabelText("Periodic Renewal Enabled:"), LabelWidth(200)]
+        public bool TimePeriodicRenewal = false;
+        [TitleGroup("Time Settings"), ShowIf("TimePeriodicRenewal"), LabelText("Periodic Renewal Interval:"), LabelWidth(200), InfoBox("Some time servers have restrictions of minimum interval (Default ones provided here have 4 sec.)", InfoMessageType.Warning)]
+        public uint TimePeriodicRenewalInterval = 30;
 
         [TitleGroup("Time Servers"), LabelWidth(200), TableList(AlwaysExpanded = true, ShowIndexLabels = true), HideLabel]
         public List<TimeServerEntryEditor> TimeServerEntries = new List<TimeServerEntryEditor>
