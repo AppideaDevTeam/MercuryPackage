@@ -199,6 +199,7 @@ namespace Mercury.InternetConnectivity
         internal static void FetchInternetTime()
         {
             var timeServerStatus = GetLocalDateTime();
+            TimeInfo.WasRenewed = timeServerStatus.Success && TimeInfo.WasFetched;
             TimeInfo.WasFetched = timeServerStatus.Success;
             TimeInfo.DateTime = timeServerStatus.LocalDateTime;
             TimeInfo.LastFetchTime = Time.realtimeSinceStartup;
@@ -277,6 +278,7 @@ namespace Mercury.InternetConnectivity
     public class TimeInfo
     {
         public bool     WasFetched;
+        public bool     WasRenewed;
         public float    LastFetchTime;
         public DateTime DateTime;
     }

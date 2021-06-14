@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -116,10 +117,17 @@ namespace Mercury.InternetConnectivity
             InternetConnectivityManager.FetchInternetTime();
             InternetConnectivityManager.LogMessage($"Time Periodic Renewal Started... {TimeInfo.DateTime.ToString_HHMMSS()}");
 
+            if(TimeInfo.WasFetched)InternetTimeFetched(InternetConnectivityManager.CalculateCurrentTime());
+            else InternetTimeNotFetched();
+            
             while (Database.TimePeriodicRenewal)
             {
                 yield return waiter;
                 InternetConnectivityManager.FetchInternetTime();
+                
+                if(TimeInfo.WasRenewed) InternetTimeRenewed(InternetConnectivityManager.CalculateCurrentTime());
+                else InternetTimeNotRenewed();
+                
                 InternetConnectivityManager.LogMessage($"Time Periodic Renewal LOOP... {TimeInfo.DateTime.ToString_HHMMSS()}");
             }
 
@@ -131,6 +139,10 @@ namespace Mercury.InternetConnectivity
         protected abstract void InternetConnectionNotEstablished();
         protected abstract void InternetConnectionRestored();
         protected abstract void InternetConnectionLost();
+        protected abstract void InternetTimeFetched(DateTime _localDateTime);
+        protected abstract void InternetTimeNotFetched();
+        protected abstract void InternetTimeRenewed(DateTime _localDateTime);
+        protected abstract void InternetTimeNotRenewed();
         #endregion
     }
 }
