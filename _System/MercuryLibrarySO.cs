@@ -6,6 +6,7 @@ namespace Mercury
 {
     public class MercuryLibrarySO : MercuryScriptableObjectInstanceReferencer<MercuryLibrarySO>
     {
+        
         #region UI COLORS
 
         internal const string color_Violet = "#ff66ff";
@@ -20,7 +21,8 @@ namespace Mercury
         }
 
         #endregion
-
+        
+        #if UNITY_EDITOR
         #region VARIABLES
         public ModuleSetting Module_LocalNotifications = new ModuleSetting("Local Notifications", "MERCURY_LOCALNOTIFICATIONS");
         public ModuleSetting Module_InternetConnectivity = new ModuleSetting("Internet Connectivity", "MERCURY_INTERNETCONNECTIVITY");
@@ -32,7 +34,7 @@ namespace Mercury
             [HorizontalGroup("Group", Width = 80), TitleGroup("Group/Activated"), HideLabel, OnInspectorInit("@Activated = ActivationStatusRequired()"), OnValueChanged("ActivationStatusChanged")] public bool Activated;
             [HorizontalGroup("Group", Width = 300), TitleGroup("Group/Name"), HideLabel, ReadOnly] public string Name;
             [HorizontalGroup("Group"), TitleGroup("Group/Definition"), HideLabel, ReadOnly, GUIColor(1,0.4f,1)] public string Definition;
-
+            
             private void ActivationStatusChanged()
             {
                if (Activated) MercuryInstaller.Install(Definition);
@@ -50,6 +52,7 @@ namespace Mercury
                 Definition = _definition;
             }
         }
+        #endif
         
         #region GLOBAL ACCESSORS
 

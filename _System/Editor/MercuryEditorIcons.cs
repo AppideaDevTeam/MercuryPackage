@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 namespace Mercury
 {
     public static class MercuryEditorIcons
@@ -7,3 +8,4 @@ namespace Mercury
         public const string LocalNotifications = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAASCAYAAACEnoQPAAAAAXNSR0IArs4c6QAAAKlJREFUOI21lD0OwjAMhf1QT8PAjHogLsDUHCCduEDPg1pmBq5jhtQhbv4HXpbE8veeZFkB/cSUF0pF5luexYKkAWpgyWCQi3kb1Wwf1tXvhuzFJg1PqWIIlhTBrWAE94AKbgTVZFVyLZEd6w08XAKxQEBlkJx2q6rw/Jp9qkjS/5s8XSfCfogovKN3tx2/azg2hTsuO709twgMH7ye12zq+Bkj8Fjo/gy+kGM921ApbFUAAAAASUVORK5CYII=";
     }
 }
+#endif

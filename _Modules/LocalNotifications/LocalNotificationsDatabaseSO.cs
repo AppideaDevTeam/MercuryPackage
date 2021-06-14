@@ -1,10 +1,7 @@
 #if MERCURY_LOCALNOTIFICATIONS
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Sirenix.OdinInspector;
-using UnityEditor.Graphs;
 using UnityEngine;
 
 namespace Mercury.LocalNotifications
