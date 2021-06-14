@@ -117,7 +117,7 @@ namespace Mercury.InternetConnectivity
             {
                 TimeServerStatus status = InternetConnectivityManager.GetLocalDateTimeFromServer(HostName);
 
-                Status = status.Success ? status.LocalDateTime.ToString_DDMMYYHHMMSS() : "<Failed to fetch>";
+                Status = status.Success ? status.LocalDateTime.ToString_DDMMYYYYHHMMSS() : "<Failed to fetch>";
             }
         }
     }

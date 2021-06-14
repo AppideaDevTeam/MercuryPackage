@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using UnityEngine;
 
 namespace Mercury
 {
@@ -15,19 +16,19 @@ namespace Mercury
         // 11:30:59
         public static string ToString_HHMMSS(this DateTime dateTime)
         {
-            return $"{dateTime.Day:D2}:{dateTime.Month:D2}:{dateTime.Second:D2}";
+            return dateTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
         }
     
         // 31.12.21
-        public static string ToString_DDMMYY(this DateTime dateTime)
+        public static string ToString_DDMMYYYY(this DateTime dateTime)
         {
-            return $"{dateTime.Day:D2}.{dateTime.Month:D2}.{dateTime.Year:D2}";
+            return dateTime.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
         }
     
         // 31.12.21 - 11:30:59
-        public static string ToString_DDMMYYHHMMSS(this DateTime dateTime)
+        public static string ToString_DDMMYYYYHHMMSS(this DateTime dateTime)
         {
-            return $"{ToString_DDMMYY(dateTime)} - {ToString_HHMMSS(dateTime)}";
+            return dateTime.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
         }
     
         // 31.12.2021 11:30 AM
@@ -41,13 +42,13 @@ namespace Mercury
         // 11:30:59
         public static string ToString_HHMMSS(this TimeSpan timeSpan)
         {
-            return $"{timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+            return timeSpan.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
         }
     
         //31.11:30:59
         public static string ToString_DDHHMMSS(this TimeSpan timeSpan)
         {
-            return $"{timeSpan.Days}.{ToString_HHMMSS(timeSpan)}";
+            return timeSpan.ToString("dd.HH:mm:ss", CultureInfo.InvariantCulture);
         }
 
         // 24h = 1
