@@ -1,5 +1,5 @@
-﻿using System;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿#if UNITY_EDITOR
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sirenix.OdinInspector.Editor;
@@ -122,3 +122,4 @@ namespace Mercury
         }
     }
 }
+#endif
