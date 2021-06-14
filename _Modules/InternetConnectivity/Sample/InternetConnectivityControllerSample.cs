@@ -1,3 +1,4 @@
+#if UNITY_EDITOR || MERCURY_INTERNETCONNECTIVITY
 using System;
 
 namespace Mercury.InternetConnectivity
@@ -20,3 +21,4 @@ namespace Mercury.InternetConnectivity
         protected override void InternetTimeNotRenewed() { }
     }
 }
+#endif

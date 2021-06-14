@@ -1,3 +1,4 @@
+#if MERCURY_INTERNETCONNECTIVITY
 using System;
 using System.Collections;
 using UnityEngine;
@@ -146,3 +147,4 @@ namespace Mercury.InternetConnectivity
         #endregion
     }
 }
+#endif
