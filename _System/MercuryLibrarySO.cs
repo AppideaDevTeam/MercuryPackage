@@ -57,14 +57,26 @@ namespace Mercury
         #region GLOBAL ACCESSORS
 
         #if MERCURY_LOCALNOTIFICATIONS
-        public static LocalNotifications.LocalNotificationsDatabaseSO LocalNotificationsDatabase => Instance.localNotificationsDatabase;
-        
+
+        public static T GetModuleDatabase<T>(T _so) where T : ScriptableObject
+        {
+            if (_so == null)
+            {
+                MercuryDebugger.LogMessage(LogModule.Core, $"Make sure {typeof(T).Name} reference isn't NULL!", LogType.Exception);
+                return null;
+            }
+
+            return _so;
+        }
+
+        public static LocalNotifications.LocalNotificationsDatabaseSO LocalNotificationsDatabase => GetModuleDatabase(Instance.localNotificationsDatabase);
+
         [TitleGroup("Scriptable Object References"), LabelText("Local Notifications"), LabelWidth(200)] 
         public LocalNotifications.LocalNotificationsDatabaseSO localNotificationsDatabase;
         #endif
         
         #if MERCURY_INTERNETCONNECTIVITY
-        public static InternetConnectivity.InternetConnectivityDatabaseSO InternetConnectivityDatabase => Instance.internetConnectivityDatabase;
+        public static InternetConnectivity.InternetConnectivityDatabaseSO InternetConnectivityDatabase => GetModuleDatabase(Instance.internetConnectivityDatabase);
         
         [TitleGroup("Scriptable Object References"), LabelText("Internet Connectivity"), LabelWidth(200)] 
         public InternetConnectivity.InternetConnectivityDatabaseSO internetConnectivityDatabase;

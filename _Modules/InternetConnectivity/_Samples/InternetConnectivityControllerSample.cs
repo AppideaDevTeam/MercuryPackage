@@ -1,4 +1,4 @@
-#if UNITY_EDITOR || MERCURY_INTERNETCONNECTIVITY
+#if MERCURY_INTERNETCONNECTIVITY
 using System;
 
 namespace Mercury.InternetConnectivity

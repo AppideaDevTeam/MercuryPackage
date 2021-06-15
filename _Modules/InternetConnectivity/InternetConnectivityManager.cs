@@ -36,7 +36,7 @@ namespace Mercury.InternetConnectivity
             
             PingEntries = new List<PingEntry>();
 
-            foreach (var pingEntryEditor in Database.PingEntries)
+            foreach (PingEntryEditor pingEntryEditor in Database.PingEntries)
                 PingEntries.Add(new PingEntry(pingEntryEditor.IPAddress));
 
             // TIME

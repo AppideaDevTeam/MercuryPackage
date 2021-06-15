@@ -13,7 +13,8 @@ namespace Mercury.InternetConnectivity
         [PropertyTooltip("Enable logging debug messages."), TitleGroup("Global Settings"), GUIColor("@MercuryLibrarySO.Color_Orange"), LabelWidth(200)]
         public bool DebuggingEnabled;
         
-        [TitleGroup("Ping Servers"), TableList(AlwaysExpanded = true, ShowIndexLabels = true), HideLabel] public List<PingEntryEditor> PingEntries = new List<PingEntryEditor>
+        [TitleGroup("Ping Servers"), TableList(AlwaysExpanded = true, ShowIndexLabels = true), HideLabel] 
+        public List<PingEntryEditor> PingEntries = new List<PingEntryEditor>
         {
             new PingEntryEditor("1.1.1.1", "Cloudflare"), 
             new PingEntryEditor("8.8.8.8", "google-public-dns-a.google.com"), 
