@@ -23,6 +23,11 @@ namespace Mercury
     
     internal static class MercuryDebugger
     {
+        public static Action<string> logListeners { get; private set; }
+
+        public static void SubscribeForLogMessages(Action<string> _action) => logListeners += _action;
+        public static void UnsubscribeForLogMessages(Action<string> _action) => logListeners -= _action;
+
         public static void LogMessage(LogModule _logModule, string _message, LogType _logType = LogType.Info)
         {
             string moduleText = "Mercury_" + _logModule;
@@ -35,6 +40,8 @@ namespace Mercury
                 case LogType.Error: Debug.LogError(logText); break;
                 case LogType.Exception: throw new Exception(logText);
             }
+
+            logListeners?.Invoke(_message);
         }
     }
 }

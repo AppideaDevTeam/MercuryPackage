@@ -100,15 +100,22 @@ namespace Mercury.InternetConnectivity
         {
             var status = new PingStatus(false, int.MaxValue);
 
+            TcpClient tcpClient = new TcpClient();
+            
             try
             {
-                var ping  = new Ping();
-                var reply = ping.Send(_ip, (int)Database.PingTimeoutMilliseconds);
-
-                if (reply.Status == IPStatus.Success)
+                Task connectTask = tcpClient.ConnectAsync(_ip, 53);
+                
+                if (connectTask.Wait(TimeSpan.FromMilliseconds((int) Database.PingTimeoutMilliseconds)))
                 {
                     status.Success = true;
-                    status.Delay   = (int) reply.RoundtripTime;
+                    status.Delay   = 100;
+                    
+                    LogMessage($"Successful ping IP address: {_ip}");
+                }
+                else
+                {                
+                    LogMessage($"Unsuccessful ping IP address: {_ip}");
                 }
             }
             catch
@@ -134,9 +141,7 @@ namespace Mercury.InternetConnectivity
                 tasks[index] = Task.Run(() =>
                 {
                     var entry = TimeServerEntries[threadSafeIndex];
-
                     var status = GetLocalDateTimeFromServer(entry.HostName);
-
                     TimeServerEntries[threadSafeIndex].Status = status;
                 });
             }
