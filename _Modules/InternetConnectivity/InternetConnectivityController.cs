@@ -49,25 +49,26 @@ namespace Mercury.InternetConnectivity
 
             if (ConnectionInfo.ConnectionEstablished)
             {
+                autoAttempted = 0;
+                InternetConnectionEstablished();
+                InternetConnectivityManager.LogMessage("Internet Connection Established...");
+                
                 if (!TimeInfo.WasFetched)
                 {
                     if(_TimePeriodicRenewalCoroutine != null) StopCoroutine(_TimePeriodicRenewalCoroutine);
                     _TimePeriodicRenewalCoroutine = StartCoroutine(TimePeriodicRenewalCoroutine());
                 }
-                
-                autoAttempted = 0;
-                InternetConnectionEstablished();
-                InternetConnectivityManager.LogMessage("Internet Connection Established...");
             }
             else
             {
                 if (Database.InternetConnectionAutoRetryOnFail && autoAttempted < Database.InternetConnectionMaxAutoRetry)
                 {
                     yield return waiter;
+                    InternetConnectionNotEstablished(true);
                     InternetConnectivityManager.LogMessage("Internet Connection NOT Established... RETRY");
                     goto RetryInitialConnection;
                 }
-                InternetConnectionNotEstablished();
+                InternetConnectionNotEstablished(false);
                 InternetConnectivityManager.LogMessage("Internet Connection NOT Established... STOP");
                 _InternetConnectionCoroutine = null;
                 yield break;
@@ -98,7 +99,6 @@ namespace Mercury.InternetConnectivity
                     autoAttempted++;
                     if (Database.InternetConnectionAutoRetryOnLost && autoAttempted < Database.InternetConnectionMaxAutoRetry)
                     {
-                        InternetConnectivityManager.LogMessage("მუტელი " + autoAttempted);
                         InternetConnectivityManager.LogMessage("Internet Connection LOST... Retry");
                         lastAttemptFailed = true;
                         goto RetryLoopConnection;
@@ -137,7 +137,7 @@ namespace Mercury.InternetConnectivity
 
         #region ABSTRACT
         protected abstract void InternetConnectionEstablished();
-        protected abstract void InternetConnectionNotEstablished();
+        protected abstract void InternetConnectionNotEstablished(bool _retrying);
         protected abstract void InternetConnectionRestored();
         protected abstract void InternetConnectionLost();
         protected abstract void InternetTimeFetched(DateTime _localDateTime);

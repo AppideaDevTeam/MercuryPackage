@@ -51,7 +51,7 @@ namespace Mercury.InternetConnectivity
 
         public static void CheckInternetConnection()
         {
-            // Preventin pinging abuse
+            // Preventing pinging abuse
             if (1000 * (Time.realtimeSinceStartup - LastPingTime) > Database.PingGateInMilliseconds)
             {
                 bool status = PingAll();
