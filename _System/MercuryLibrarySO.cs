@@ -54,10 +54,6 @@ namespace Mercury
         }
         #endif
         
-        #region GLOBAL ACCESSORS
-
-        #if MERCURY_LOCALNOTIFICATIONS
-
         public static T GetModuleDatabase<T>(T _so) where T : ScriptableObject
         {
             if (_so == null)
@@ -68,6 +64,10 @@ namespace Mercury
 
             return _so;
         }
+        
+        #region GLOBAL ACCESSORS
+
+        #if MERCURY_LOCALNOTIFICATIONS
 
         public static LocalNotifications.LocalNotificationsDatabaseSO LocalNotificationsDatabase => GetModuleDatabase(Instance.localNotificationsDatabase);
 
