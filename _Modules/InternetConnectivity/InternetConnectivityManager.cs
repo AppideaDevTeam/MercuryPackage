@@ -99,17 +99,19 @@ namespace Mercury.InternetConnectivity
 
         internal static bool CheckConnectionWithServer(string ipAddress, int _port)
         {
-            TcpClient tcpClient = new TcpClient();
+            var status = false;
+
+            using var tcpClient = new TcpClient();
             
             try
             {
-                Task connectTask = tcpClient.ConnectAsync(ipAddress, _port);
+                var connectTask = tcpClient.ConnectAsync(ipAddress, _port);
                 
-                if (connectTask.Wait(TimeSpan.FromMilliseconds((int) Database.TcpServerTimeoutMilliseconds)))
-                {                    
-                    LogMessage($"Successful connection to IP address: {ipAddress}");
+                if (connectTask.Wait(TimeSpan.FromMilliseconds((int)Database.TcpServerTimeoutMilliseconds)))
+                {
+                    status = true;
 
-                    return true;
+                    LogMessage($"Successful connection to IP address: {ipAddress}");
                 }
                 else
                 {                
@@ -121,7 +123,9 @@ namespace Mercury.InternetConnectivity
                 LogMessage($"Failed to connection to IP address: {ipAddress}");
             }
 
-            return false;
+            tcpClient.Close();
+
+            return status;
         }
 
         #endregion
@@ -176,7 +180,7 @@ namespace Mercury.InternetConnectivity
 
             try
             {
-                var tcpClient = new TcpClient(_hostName, 13);
+                using var tcpClient = new TcpClient(_hostName, 13);
 
                 using var streamReader = new StreamReader(tcpClient.GetStream());
 
@@ -186,6 +190,9 @@ namespace Mercury.InternetConnectivity
 
                 status.Success       = true;
                 status.LocalDateTime = localDateTime;
+
+                streamReader.Close();
+                tcpClient.Close();
             }
             catch
             {
