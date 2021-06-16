@@ -142,7 +142,7 @@ namespace Mercury.InternetConnectivity
         protected abstract void InternetConnectionEstablished();
         protected abstract void InternetConnectionNotEstablished(bool _retrying);
         protected abstract void InternetConnectionRestored();
-        protected abstract void InternetConnectionLost(bool _retrying);
+        protected abstract void InternetConnectionLost(bool _reconnecting);
         protected abstract void InternetTimeFetched(DateTime _localDateTime);
         protected abstract void InternetTimeNotFetched();
         protected abstract void InternetTimeRenewed(DateTime _localDateTime);
