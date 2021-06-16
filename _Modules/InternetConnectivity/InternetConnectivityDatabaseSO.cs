@@ -91,7 +91,7 @@ namespace Mercury.InternetConnectivity
             {
                 var status = InternetConnectivityManager.CheckConnectionWithServer(IPAddress, Port);
 
-                Status = status ? "OK" : "Fail";
+                Status = status ? "OK" : "<Failed to connect>";
             }
         }
     }

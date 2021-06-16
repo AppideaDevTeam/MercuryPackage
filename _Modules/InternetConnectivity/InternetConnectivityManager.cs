@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -241,7 +240,7 @@ namespace Mercury.InternetConnectivity
         public TcpServerEntry(string _ipAddress, int _port)
         {
             IPAddress = _ipAddress;
-            Port = _port;
+            Port      = _port;
         }
     }
 
