@@ -26,6 +26,7 @@ namespace Mercury.InternetConnectivity
         public static void RunInternetCheckLoop() => Instance.RunInternetConnectionCheckingCoroutine();
 
         public static void StopInternetCheckLoop() => Instance.StopAllCoroutines();
+
         #endregion
 
         private void RunInternetConnectionCheckingCoroutine()

@@ -6,7 +6,6 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
-using Ping = System.Net.NetworkInformation.Ping;
 
 namespace Mercury.InternetConnectivity
 {
@@ -14,9 +13,8 @@ namespace Mercury.InternetConnectivity
     {
         #region VARIABLES
 
-        private static List<PingEntry>                PingEntries;
+        private static List<TcpServerEntry>           TcpServerEntries;
         private static List<TimeServerEntry>          TimeServerEntries;
-        private static float                          LastPingTime;
         
         internal static TimeInfo TimeInfo { get; private set; }
         internal static ConnectionInfo ConnectionInfo { get; private set; }
@@ -31,30 +29,31 @@ namespace Mercury.InternetConnectivity
             // INITIALIZATION GATE
             if (IsInitialized) return;
             
-            // PING
+            // TCP SERVER
             ConnectionInfo = new ConnectionInfo();
             
-            PingEntries = new List<PingEntry>();
+            TcpServerEntries = new List<TcpServerEntry>();
 
-            foreach (PingEntryEditor pingEntryEditor in Database.PingEntries)
-                PingEntries.Add(new PingEntry(pingEntryEditor.IPAddress));
+            foreach (TcpServerEntryEditor tcpServerEntryEditor in Database.TcpServerEntries)
+                TcpServerEntries.Add(new TcpServerEntry(tcpServerEntryEditor.IPAddress, tcpServerEntryEditor.Port));
 
             // TIME
             TimeInfo = new TimeInfo();
             
             TimeServerEntries = new List<TimeServerEntry>();
 
-            foreach (var timeServerEntryEditor in Database.TimeServerEntries) TimeServerEntries.Add(new TimeServerEntry(timeServerEntryEditor.HostName));
+            foreach (var timeServerEntryEditor in Database.TimeServerEntries)
+                TimeServerEntries.Add(new TimeServerEntry(timeServerEntryEditor.HostName));
 
             IsInitialized = true;
         }
 
         public static void CheckInternetConnection()
         {
-            // Preventing pinging abuse
-            if (1000 * (Time.realtimeSinceStartup - LastPingTime) > Database.PingGateInMilliseconds)
+            // Prevent connection request abuse
+            if (1000 * (Time.realtimeSinceStartup - ConnectionInfo.LastCheckTime) > Database.TcpServerGateInMilliseconds)
             {
-                bool status = PingAll();
+                bool status = CheckConnection();
                 ConnectionInfo.CurrentlyConnected = status;
                 
                 // IF RETRY
@@ -62,25 +61,27 @@ namespace Mercury.InternetConnectivity
             }
         }
 
-        #region PING
+        #region TCP SERVER
 
-        private static bool PingAll()
+        private static bool CheckConnection()
         {
-            // STORE PING TIME
-            LastPingTime = Time.realtimeSinceStartup;
+            // STORE TCP CONNECTION REQUEST TIME
+            ConnectionInfo.LastCheckTime = Time.realtimeSinceStartup;
 
-            var tasks = new Task[Database.PingEntries.Count];
+            var tasks = new Task[Database.TcpServerEntries.Count];
 
-            // PING ALL ENTRY IPs
+            // CONNECT TO ALL ENTRY IPs
             for (var index = 0; index < tasks.Length; index++)
             {
                 var threadSafeIndex = index;
 
                 tasks[index] = Task.Run(() =>
                 {
-                    var status = Ping(PingEntries[threadSafeIndex].IPAddress);
+                    var entry = TcpServerEntries[threadSafeIndex];
 
-                    PingEntries[threadSafeIndex].Status = status;
+                    var status = CheckConnectionWithServer(entry.IPAddress, entry.Port);
+
+                    TcpServerEntries[threadSafeIndex].Status = status;
                 });
             }
 
@@ -88,42 +89,39 @@ namespace Mercury.InternetConnectivity
             for (var index = 0; index < tasks.Length; index++)
             {
                 Task.WaitAny(tasks);
-                if (PingEntries[index].Status.Success)
-                    return true;
+
+                if (TcpServerEntries[index].Status) return true;
             }
 
             // COULDN'T CONNECT
             return false;
         }
 
-        internal static PingStatus Ping(string _ip)
+        internal static bool CheckConnectionWithServer(string ipAddress, int _port)
         {
-            var status = new PingStatus(false, int.MaxValue);
-
             TcpClient tcpClient = new TcpClient();
             
             try
             {
-                Task connectTask = tcpClient.ConnectAsync(_ip, 53);
+                Task connectTask = tcpClient.ConnectAsync(ipAddress, _port);
                 
-                if (connectTask.Wait(TimeSpan.FromMilliseconds((int) Database.PingTimeoutMilliseconds)))
-                {
-                    status.Success = true;
-                    status.Delay   = 100;
-                    
-                    LogMessage($"Successful ping IP address: {_ip}");
+                if (connectTask.Wait(TimeSpan.FromMilliseconds((int) Database.TcpServerTimeoutMilliseconds)))
+                {                    
+                    LogMessage($"Successful connection to IP address: {ipAddress}");
+
+                    return true;
                 }
                 else
                 {                
-                    LogMessage($"Unsuccessful ping IP address: {_ip}");
+                    LogMessage($"Unsuccessful connection to IP address: {ipAddress}");
                 }
             }
             catch
             {
-                LogMessage($"Failed to ping IP address: {_ip}");
+                LogMessage($"Failed to connection to IP address: {ipAddress}");
             }
 
-            return status;
+            return false;
         }
 
         #endregion
@@ -161,8 +159,6 @@ namespace Mercury.InternetConnectivity
 
         internal static DateTime ParseTimeServerResponse(string _response)
         {
-            var result = new DateTime();
-
             var year  = int.Parse(_response.Substring(7,  2));
             var month = int.Parse(_response.Substring(10, 2));
             var day   = int.Parse(_response.Substring(13, 2));
@@ -171,9 +167,7 @@ namespace Mercury.InternetConnectivity
             var minute = int.Parse(_response.Substring(19, 2));
             var second = int.Parse(_response.Substring(22, 2));
 
-            result = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Unspecified).ToLocalTime();
-
-            return result;
+            return new DateTime(year, month, day, hour, minute, second, DateTimeKind.Unspecified).ToLocalTime();
         }
         
         internal static TimeServerStatus GetLocalDateTimeFromServer(string _hostName)
@@ -231,27 +225,16 @@ namespace Mercury.InternetConnectivity
 
     #region DATA CLASSES
 
-    public class PingEntry
+    public class TcpServerEntry
     {
-        public readonly string     IPAddress;
-        public          PingStatus Status;
+        public readonly string IPAddress;
+        public readonly int    Port;
+        public bool            Status;
 
-        public PingEntry(string _ipAddress)
+        public TcpServerEntry(string _ipAddress, int _port)
         {
             IPAddress = _ipAddress;
-            Status    = new PingStatus(false, int.MaxValue);
-        }
-    }
-
-    public class PingStatus
-    {
-        public bool Success;
-        public int  Delay;
-
-        public PingStatus(bool _success, int _delay)
-        {
-            Success = _success;
-            Delay   = _delay;
+            Port = _port;
         }
     }
 
@@ -291,8 +274,9 @@ namespace Mercury.InternetConnectivity
     [Serializable]
     public class ConnectionInfo
     {
-        public bool ConnectionEstablished;
-        public bool CurrentlyConnected;
+        public bool  ConnectionEstablished;
+        public bool  CurrentlyConnected;
+        public float LastCheckTime;
     }
     #endregion
 }

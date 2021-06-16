@@ -13,18 +13,18 @@ namespace Mercury.InternetConnectivity
         [PropertyTooltip("Enable logging debug messages."), TitleGroup("Global Settings"), GUIColor("@MercuryLibrarySO.Color_Orange"), LabelWidth(200)]
         public bool DebuggingEnabled;
         
-        [TitleGroup("Ping Servers"), TableList(AlwaysExpanded = true, ShowIndexLabels = true), HideLabel] 
-        public List<PingEntryEditor> PingEntries = new List<PingEntryEditor>
+        [TitleGroup("Tcp Servers"), TableList(AlwaysExpanded = true, ShowIndexLabels = true), HideLabel] 
+        public List<TcpServerEntryEditor> TcpServerEntries = new List<TcpServerEntryEditor>
         {
-            new PingEntryEditor("1.1.1.1", "Cloudflare"), 
-            new PingEntryEditor("8.8.8.8", "google-public-dns-a.google.com"), 
-            new PingEntryEditor("8.8.4.4", "google-public-dns-b.google.com")
+            new TcpServerEntryEditor("1.1.1.1", 53, "Cloudflare"), 
+            new TcpServerEntryEditor("8.8.8.8", 53, "google-public-dns-a.google.com"), 
+            new TcpServerEntryEditor("8.8.4.4", 53, "google-public-dns-b.google.com")
         };
 
-        [TitleGroup("Ping Settings"), LabelWidth(200), InfoBox("This field will used to prevent abusing servers with ping requests.", InfoMessageType.Warning)] 
-        public uint PingGateInMilliseconds = 800;
-        [TitleGroup("Ping Settings"), LabelWidth(200)] 
-        public uint PingTimeoutMilliseconds          = 1000;
+        [TitleGroup("Tcp Server Settings"), LabelWidth(200), InfoBox("This field will used to prevent abusing servers with connection requests.", InfoMessageType.Warning)] 
+        public uint TcpServerGateInMilliseconds  = 800;
+        [TitleGroup("Tcp Server Settings"), LabelWidth(200)] 
+        public uint TcpServerTimeoutMilliseconds = 1000;
 
         [TitleGroup("Internet Connection System"), LabelText("Connection Checking in Loop:"), LabelWidth(200)]
         public bool InternetConnectionCheckingInLoop = true;
@@ -65,21 +65,23 @@ namespace Mercury.InternetConnectivity
     }
 
     [Serializable]
-    public class PingEntryEditor
+    public class TcpServerEntryEditor
     {
         public string IPAddress;
+        public int    Port;
         public string Info;
 
         [ReadOnly, GUIColor("@MercuryLibrarySO.Color_Violet")] public string Status;
 
-        public PingEntryEditor(string _ipAddress, string _info)
+        public TcpServerEntryEditor(string _ipAddress, int _port, string _info)
         {
             IPAddress = _ipAddress;
+            Port = _port;
             Info = _info;
         }
 
         [TableColumnWidth(300, Resizable = false), Button("Check Now")]
-        public void Ping()
+        public void Check()
         {
             if (string.IsNullOrEmpty(IPAddress))
             {
@@ -87,9 +89,9 @@ namespace Mercury.InternetConnectivity
             }
             else
             {
-                PingStatus status = InternetConnectivityManager.Ping(IPAddress);
+                var status = InternetConnectivityManager.CheckConnectionWithServer(IPAddress, Port);
 
-                Status = status.Success ? status.Delay.ToString() : "<Failed to ping server>";
+                Status = status ? "OK" : "Fail";
             }
         }
     }
