@@ -6,24 +6,22 @@ namespace Mercury.InternetConnectivity
 {
     public class InternetConnectivityControllerSample : InternetConnectivityController
     {
-        private static string log = "";
+        private static string logBuffer = "";
 
-        private static void LogMsg(string _msg)
+        private static void LogMessage(string _message)
         {
-            log += _msg + '\n';
+            logBuffer += $"{_message}\n";
         }
         
         private void OnGUI()
         {
             GUI.skin.label.fontSize = 35;
-            GUI.Label(new Rect(20,20, 3000, 2000), log);   
+            GUI.Label(new Rect(20,20, 3000, 2000), logBuffer);   
         }
         
-        
-
         private void Start()
         {
-            MercuryDebugger.SubscribeForLogMessages(LogMsg);
+            MercuryDebugger.RegisterLogger(LogMessage);
             Initialize();
             RunInternetCheckLoop();
         }
@@ -36,7 +34,7 @@ namespace Mercury.InternetConnectivity
             else InternetConnectivityManager.LogMessage("Internet Connection NOT Established FINAL VERDICT!");
         }
         protected override void InternetConnectionRestored() { }
-        protected override void InternetConnectionLost() { }
+        protected override void InternetConnectionLost(bool _retrying) { }
         protected override void InternetTimeFetched(DateTime _localDateTime) { }
         protected override void InternetTimeNotFetched() { }
         protected override void InternetTimeRenewed(DateTime _localDateTime) { }

@@ -99,11 +99,13 @@ namespace Mercury.InternetConnectivity
                     autoAttempted++;
                     if (Database.InternetConnectionAutoRetryOnLost && autoAttempted < Database.InternetConnectionMaxAutoRetry)
                     {
+                        InternetConnectionLost(true);
                         InternetConnectivityManager.LogMessage("Internet Connection LOST... Retry");
                         lastAttemptFailed = true;
                         goto RetryLoopConnection;
                     }
-                    InternetConnectionLost();
+
+                    InternetConnectionLost(false);
                     InternetConnectivityManager.LogMessage("Internet Connection LOST... STOP");
                     _InternetConnectionCoroutine = null;
                     yield break;
@@ -139,7 +141,7 @@ namespace Mercury.InternetConnectivity
         protected abstract void InternetConnectionEstablished();
         protected abstract void InternetConnectionNotEstablished(bool _retrying);
         protected abstract void InternetConnectionRestored();
-        protected abstract void InternetConnectionLost();
+        protected abstract void InternetConnectionLost(bool _retrying);
         protected abstract void InternetTimeFetched(DateTime _localDateTime);
         protected abstract void InternetTimeNotFetched();
         protected abstract void InternetTimeRenewed(DateTime _localDateTime);
