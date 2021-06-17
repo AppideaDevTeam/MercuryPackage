@@ -1,6 +1,7 @@
 #if MERCURY_INTERNETCONNECTIVITY
 using System;
 using System.Collections;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Mercury.InternetConnectivity
@@ -13,8 +14,8 @@ namespace Mercury.InternetConnectivity
         private static Coroutine _TimePeriodicRenewalCoroutine;
 
         // MANAGER REFERENCES
-        public static  TimeInfo                       TimeInfo       => InternetConnectivityManager.TimeInfo;
-        public static  ConnectionInfo                 ConnectionInfo => InternetConnectivityManager.ConnectionInfo;
+        [ShowInInspector] public static  TimeInfo                       TimeInfo       => InternetConnectivityManager.TimeInfo;
+        [ShowInInspector] public static  ConnectionInfo                 ConnectionInfo => InternetConnectivityManager.ConnectionInfo;
         private static InternetConnectivityDatabaseSO Database       => MercuryLibrarySO.InternetConnectivityDatabase;
 
         #endregion
@@ -148,6 +149,8 @@ namespace Mercury.InternetConnectivity
         protected abstract void InternetTimeRenewed(DateTime _localDateTime);
         protected abstract void InternetTimeNotRenewed();
         #endregion
+
+        private void OnDestroy() => InternetConnectivityManager.Reset();
     }
 }
 #endif

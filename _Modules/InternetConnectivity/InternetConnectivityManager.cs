@@ -23,6 +23,17 @@ namespace Mercury.InternetConnectivity
 
         #endregion
 
+        internal static void Reset()
+        {
+            IsInitialized = false;
+            ConnectionInfo = null;
+            TimeInfo = null;
+            TcpServerEntries = null;
+            TimeServerEntries = null;
+            
+            Initialize();
+        }
+        
         public static void Initialize()
         {
             // INITIALIZATION GATE
@@ -38,6 +49,9 @@ namespace Mercury.InternetConnectivity
 
             // TIME
             TimeInfo = new TimeInfo();
+            
+            Debug.Log("TimeInfo: " + TimeInfo);
+            Debug.Log("TimeInfo: " + TimeInfo.WasFetched);
             
             TimeServerEntries = new List<TimeServerEntry>();
 

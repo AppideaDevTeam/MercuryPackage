@@ -1,6 +1,7 @@
 #if MERCURY_INTERNETCONNECTIVITY
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Mercury.InternetConnectivity
 {
@@ -12,6 +13,12 @@ namespace Mercury.InternetConnectivity
         {
             logBuffer += $"{_message}\n";
         }
+
+        [ContextMenu("Zoro")]
+        public void Zoro()
+        {
+            SceneManager.LoadScene(0);
+        }
         
         private void OnGUI()
         {
@@ -21,6 +28,7 @@ namespace Mercury.InternetConnectivity
         
         private void Start()
         {
+            Debug.Log("app restarted");
             MercuryDebugger.RegisterLogger(LogMessage);
             Initialize();
             RunInternetCheckLoop();
