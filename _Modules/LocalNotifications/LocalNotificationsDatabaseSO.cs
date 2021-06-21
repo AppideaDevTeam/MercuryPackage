@@ -79,11 +79,11 @@ namespace Mercury.LocalNotifications
         public List<NotificationEditorData> reminderTexts;
         [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Periodic Rewards"), ShowIf("PeriodicRewardsEnabled")]
         public List<NotificationEditorData_Periodic> periodicRewardsTexts;
-        [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Free Resources"), ShowIf("FreeResourcesEnabled")]
+        [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Free Resources"), ShowIf("FreeResourcesEnabled"), InfoBox("For passing data in buffers & icons - use (Tag:String, Value:String) tuple convention!")]
         public List<NotificationEditorData_FreeRewards> freeResourcesTexts;
-        [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Processes"), ShowIf("ProcessesEnabled"), InfoBox("For passing data in buffers - use (Tag:String, Value:String) tuple convention!", InfoMessageType.Warning)]
+        [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Processes"), ShowIf("ProcessesEnabled"), InfoBox("For passing data in buffers & icons - use (Tag:String, Value:String) tuple convention!")]
         public List<NotificationEditorData_Processes> processesTexts;
-        [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Enemy Connected"), ShowIf("EnemyConnectedEnabled"), InfoBox("Write name of the enemy in %Enemy% tag!", InfoMessageType.Warning)]
+        [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Enemy Connected"), ShowIf("EnemyConnectedEnabled"), InfoBox("Write name of the enemy in %Enemy% tag!")]
         public NotificationEditorData_EnemyConnected enemyConnectedText;
         #endregion
 

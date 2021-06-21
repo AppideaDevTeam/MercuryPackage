@@ -116,12 +116,14 @@ namespace Mercury.LocalNotifications
                 {
                     if (txt.Identifier.Equals(notificationInfo.Identifier))
                     {
+                        var notificationInfoData = new List<DataTagValuePair> {notificationInfo.Data};
+                        
                         var notification = new LocalNotification
                         {
-                            Title         = ProcessBufferTaggedData(txt.EditorData.Title, new List<DataTagValuePair>{ notificationInfo.Data }),
-                            Text          = ProcessBufferTaggedData(txt.EditorData.Text,  new List<DataTagValuePair>{ notificationInfo.Data }),
-                            IconSmall     = txt.EditorData.iconSmall,
-                            IconLarge     = txt.EditorData.iconLarge,
+                            Title         = ProcessBufferTaggedData(txt.EditorData.Title, notificationInfoData),
+                            Text          = ProcessBufferTaggedData(txt.EditorData.Text,  notificationInfoData),
+                            IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfoData),
+                            IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfoData),
                             FireTimeDelay = notificationInfo.FireTime,
                             ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : "free_resources"
                         };
@@ -275,8 +277,8 @@ namespace Mercury.LocalNotifications
                         {
                             Title         = ProcessBufferTaggedData(txt.EditorData.Title, notificationInfo.Data),
                             Text          = ProcessBufferTaggedData(txt.EditorData.Text,  notificationInfo.Data),
-                            IconSmall     = txt.EditorData.iconSmall,
-                            IconLarge     = txt.EditorData.iconLarge,
+                            IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
+                            IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
                             FireTimeDelay = notificationInfo.FireTime,
                             ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : "processes_rewards"
                         };
