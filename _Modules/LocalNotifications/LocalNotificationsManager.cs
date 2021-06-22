@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Sirenix.Utilities;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -451,21 +452,27 @@ namespace Mercury.LocalNotifications
         }
         #endregion
     }
-    
+
     #region ADDITIONAL CLASSES AND STRUCTS
-    public struct ApplicationLaunchIntent
+
+    public class ApplicationLaunchIntent
     {
+        public bool             HasIntent;
         public NotificationType Type;
         public string           Data;
 
         public ApplicationLaunchIntent(string _rawData)
         {
-            //Custom:111
+            HasIntent = !string.IsNullOrEmpty(_rawData);
+
+            if (!HasIntent) return;
+
             int separatorIndex = _rawData.IndexOf(':');
-                
+
             string typeText = _rawData.Substring(0, separatorIndex);
+
             Type = (NotificationType) Enum.Parse(typeof(NotificationType), typeText, true);
-                
+
             Data = _rawData.Substring(separatorIndex + 1, _rawData.Length - separatorIndex);
         }
     }
