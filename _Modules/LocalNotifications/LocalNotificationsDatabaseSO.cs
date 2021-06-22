@@ -102,7 +102,7 @@ namespace Mercury.LocalNotifications
     [Serializable]
     public class TimeRange
     {
-        [BoxGroup("Ranges", ShowLabel = false), GUIColor("@MercuryLibrarySO.Color_Violet"), Title("$rangeString", "-24h, +24h", TitleAlignment = TitleAlignments.Centered, Bold = true)] [MinMaxSlider(-24, 24), HideLabel, ShowInInspector]
+        [BoxGroup("Ranges", ShowLabel = false), GUIColor("@MercuryLibrarySO.Color_Violet"), Title("$rangeString", "-24h, +24h", TitleAlignment = TitleAlignments.Centered, Bold = true)] [MinMaxSlider(-24, 24), HideLabel, SerializeField]
         private Vector2Int range = new Vector2Int(-2, 9);
         private string quietHourFromString => LocalNotificationsDatabaseSO.IntHourToTime(range.x);
         private string quietHourToString   => LocalNotificationsDatabaseSO.IntHourToTime(range.y);

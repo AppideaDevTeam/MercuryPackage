@@ -8,6 +8,16 @@ using Random = UnityEngine.Random;
 
 namespace Mercury.LocalNotifications
 {
+    public enum NotificationType
+    {
+        Custom,   
+        Periodic,
+        FreeResources,
+        Processed,
+        Reminder,
+        EnemyConnected
+    }
+    
     internal static class LocalNotificationsManager
     {
         #region VARIABLES
@@ -75,6 +85,7 @@ namespace Mercury.LocalNotifications
                         {
                             Title         = ProcessBufferTaggedData(txt.EditorData.Title, notificationInfo.Data),
                             Text          = ProcessBufferTaggedData(txt.EditorData.Text,  notificationInfo.Data),
+                            Data          = $"Periodic:{notificationInfo.Period}",
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
                             FireTimeDelay = notificationInfo.FireTime,
@@ -97,6 +108,7 @@ namespace Mercury.LocalNotifications
         {
             foreach (var notification in _notifications)
             {
+                notification.Data = $"{NotificationType.Custom}:{notification.Data}";
                 ScheduleLocalNotification(notification, Database.QuietHoursAffectOnCustomsEnabled);
                 
                 // DEBUG
@@ -122,6 +134,7 @@ namespace Mercury.LocalNotifications
                         {
                             Title         = ProcessBufferTaggedData(txt.EditorData.Title, notificationInfoData),
                             Text          = ProcessBufferTaggedData(txt.EditorData.Text,  notificationInfoData),
+                            Data          = $"{NotificationType.FreeResources}:{notificationInfo.Identifier}",
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfoData),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfoData),
                             FireTimeDelay = notificationInfo.FireTime,
@@ -131,7 +144,7 @@ namespace Mercury.LocalNotifications
                         ScheduleLocalNotification(notification, true);
                         
                         // DEBUG
-                        LogMessage($"TYPE: FreeResources | Title: {notification.Title} | Delivery Time: {DateTime.Now.Add(notification.FireTimeDelay).ToString_DDMMYYYYHHMMTT()}");
+                        LogMessage($"TYPE: FreeResources | Identifier: {notificationInfo.Identifier} | Delivery Time: {DateTime.Now.Add(notification.FireTimeDelay).ToString_DDMMYYYYHHMMTT()}");
                         break;
                     }
                 }
@@ -163,6 +176,7 @@ namespace Mercury.LocalNotifications
 
                 for (var comparerB = comparerA + 1; comparerB < sortedList.Count; comparerB++)
                 {
+                    // მაწონი
                     int deltaMinutes = (int) sortedList[comparerB].FireTime.Subtract(sortedList[comparerA].FireTime).TotalMinutes;
 
                     if (deltaMinutes < Database.FreeResourcesSpamPreventionThresholdMinutes)
@@ -213,7 +227,7 @@ namespace Mercury.LocalNotifications
                 {
                     Title         = editorData.EditorData.Title,
                     Text          = editorData.EditorData.Text.Replace("%Enemy%", _names[i]),
-                    Data          = _names[i],
+                    Data          = $"{NotificationType.EnemyConnected}:{_names[i]}",
                     IconSmall     = editorData.EditorData.iconSmall,
                     IconLarge     = editorData.EditorData.iconLarge,
                     FireTimeDelay = scheduledTimes[i],
@@ -278,6 +292,7 @@ namespace Mercury.LocalNotifications
                         {
                             Title         = ProcessBufferTaggedData(txt.EditorData.Title, notificationInfo.Data),
                             Text          = ProcessBufferTaggedData(txt.EditorData.Text,  notificationInfo.Data),
+                            Data          = $"{NotificationType.Processed}:{notificationInfo.Identifier}",
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
                             FireTimeDelay = notificationInfo.FireTime,
@@ -287,7 +302,7 @@ namespace Mercury.LocalNotifications
                         ScheduleLocalNotification(notification, true);
 
                         // DEBUG
-                        LogMessage($"TYPE: Processes | Title: {notification.Title} | Delivery Time: {DateTime.Now.Add(notification.FireTimeDelay).ToString_DDMMYYYYHHMMTT()}");
+                        LogMessage($"TYPE: Processes | Identifier: {notificationInfo.Identifier} | Delivery Time: {DateTime.Now.Add(notification.FireTimeDelay).ToString_DDMMYYYYHHMMTT()}");
 
                         break;
                     }
@@ -348,6 +363,7 @@ namespace Mercury.LocalNotifications
                     {
                         Title         = notificationTitle,
                         Text          = notificationDescription,
+                        Data          = $"{NotificationType.Reminder}:_dayIndex",
                         IconSmall     = notificationIconSmall,
                         IconLarge     = notificationIconLarge,
                         FireTimeDelay = fireTimeDelay
@@ -383,7 +399,6 @@ namespace Mercury.LocalNotifications
                 if (quietHoursIsStretchedOverTwoDays) return _dateTime.TimeOfDay <= quietHoursTo.TimeOfDay || _dateTime.TimeOfDay >= quietHoursFrom.TimeOfDay;
                 return _dateTime.TimeOfDay >= quietHoursFrom.TimeOfDay && _dateTime.TimeOfDay <= quietHoursTo.TimeOfDay;
             }
-                
 
             return false;
         }
@@ -413,8 +428,20 @@ namespace Mercury.LocalNotifications
         #endregion
 
         #region INTENT
-        public static bool ApplicationLaunchedViaNotification(out string data) { return _platformManager.ApplicationLaunchedViaNotification(out data); }
 
+        public static bool ApplicationLaunchedViaNotification(out string data)
+        {
+            return _platformManager.ApplicationLaunchedViaNotification(out data);
+        }
+        
+        public static ApplicationLaunchIntent GetApplicationLaunchIntent()
+        {
+            string rawData = string.Empty;
+
+            _platformManager.ApplicationLaunchedViaNotification(out rawData);
+            
+            return new ApplicationLaunchIntent(rawData);
+        }
         #endregion
 
         #region DEBUG
@@ -426,6 +453,23 @@ namespace Mercury.LocalNotifications
     }
     
     #region ADDITIONAL CLASSES AND STRUCTS
+    public struct ApplicationLaunchIntent
+    {
+        public NotificationType Type;
+        public string           Data;
+
+        public ApplicationLaunchIntent(string _rawData)
+        {
+            //Custom:111
+            int separatorIndex = _rawData.IndexOf(':');
+                
+            string typeText = _rawData.Substring(0, separatorIndex);
+            Type = (NotificationType) Enum.Parse(typeof(NotificationType), typeText, true);
+                
+            Data = _rawData.Substring(separatorIndex + 1, _rawData.Length - separatorIndex);
+        }
+    }
+    
     public class NotificationInfo_Periodic
     {
         public string           Period;

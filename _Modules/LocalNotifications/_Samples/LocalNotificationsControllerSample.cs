@@ -18,7 +18,7 @@ namespace Mercury.LocalNotifications
                         new DataTagValuePair("Gift", "Coins"),
                         new DataTagValuePair("Amount",  "150")
                     },
-                    FireTime   = DateTime.Today.AddDays(1).Subtract(DateTime.Now)
+                    FireTime   = DateTime.Today.AddSeconds(5).Subtract(DateTime.Now)
                 },
                 
                 new NotificationInfo_Periodic
@@ -121,7 +121,7 @@ namespace Mercury.LocalNotifications
                     IconSmall = "icon_small_is_added",
                     IconLarge = "icon_large_is_surely_added",
                     Data = "010011100100111110100001110_LOL",
-                    FireTimeDelay = TimeSpan.FromHours(12)
+                    FireTimeDelay = TimeSpan.FromSeconds(5)
                 }
             };
         }
