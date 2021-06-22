@@ -77,7 +77,7 @@ namespace Mercury.LocalNotifications
         // TEXTS
         [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Remainders"), ShowIf("RemindersEnabled")]
         public List<NotificationEditorData> reminderTexts;
-        [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Periodic Rewards"), ShowIf("PeriodicRewardsEnabled")]
+        [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Periodic Rewards"), ShowIf("PeriodicRewardsEnabled"), InfoBox("For passing data in buffers & icons - use (Tag:String, Value:String) tuple convention!")]
         public List<NotificationEditorData_Periodic> periodicRewardsTexts;
         [PropertyTooltip(""), TabGroup("Tabs", "Notification Texts"), TitleGroup("Tabs/Notification Texts/Free Resources"), ShowIf("FreeResourcesEnabled"), InfoBox("For passing data in buffers & icons - use (Tag:String, Value:String) tuple convention!")]
         public List<NotificationEditorData_FreeRewards> freeResourcesTexts;

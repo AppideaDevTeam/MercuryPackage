@@ -75,8 +75,8 @@ namespace Mercury.LocalNotifications
                         {
                             Title         = ProcessBufferTaggedData(txt.EditorData.Title, notificationInfo.Data),
                             Text          = ProcessBufferTaggedData(txt.EditorData.Text,  notificationInfo.Data),
-                            IconSmall     = txt.EditorData.iconSmall,
-                            IconLarge     = txt.EditorData.iconLarge,
+                            IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
+                            IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
                             FireTimeDelay = notificationInfo.FireTime,
                             ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : "periodic"
                         };
