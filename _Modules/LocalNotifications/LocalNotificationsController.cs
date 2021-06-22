@@ -27,6 +27,14 @@ namespace Mercury.LocalNotifications
 
         public bool ApplicationLaunchedViaNotification(out string data)
         {
+            #if UNITY_EDITOR
+            
+            data = $"Editor{System.Guid.NewGuid()}";
+            
+            return true;
+            
+            #endif
+
             bool launched = LocalNotificationsManager.ApplicationLaunchedViaNotification(out data);
 
             LocalNotificationsManager.LogMessage($"Application was launched via notification, Data: {data}");
