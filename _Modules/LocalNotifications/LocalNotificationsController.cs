@@ -25,7 +25,7 @@ namespace Mercury.LocalNotifications
             LocalNotificationsManager.LogMessage("All notifications canceled");
         }
         
-        public ApplicationLaunchIntent GetApplicationLaunchIntent => LocalNotificationsManager.GetApplicationLaunchIntent();
+        public ApplicationLaunchIntent GetApplicationLaunchIntent () => LocalNotificationsManager.GetApplicationLaunchIntent();
 
         #endregion
         
