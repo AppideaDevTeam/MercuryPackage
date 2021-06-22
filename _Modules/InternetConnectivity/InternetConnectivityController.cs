@@ -28,6 +28,8 @@ namespace Mercury.InternetConnectivity
 
         public static void StopInternetCheckLoop() => Instance.StopAllCoroutines();
 
+        public static DateTime GetUpdatedInternetTime => InternetConnectivityManager.CalculateCurrentTime();
+
         #endregion
 
         private void RunInternetConnectionCheckingCoroutine()
