@@ -24,23 +24,8 @@ namespace Mercury.LocalNotifications
             LocalNotificationsManager.CancelAllNotifications();
             LocalNotificationsManager.LogMessage("All notifications canceled");
         }
-
-        public bool ApplicationLaunchedViaNotification(out string data)
-        {
-            #if UNITY_EDITOR
-            
-            data = $"Editor{System.Guid.NewGuid()}";
-            
-            return true;
-            
-            #endif
-
-            bool launched = LocalNotificationsManager.ApplicationLaunchedViaNotification(out data);
-
-            LocalNotificationsManager.LogMessage($"Application was launched via notification, Data: {data}");
-
-            return launched;
-        }
+        
+        public ApplicationLaunchIntent GetApplicationLaunchIntent => LocalNotificationsManager.GetApplicationLaunchIntent();
 
         #endregion
         
