@@ -22,7 +22,7 @@ namespace Mercury.LocalNotifications
                 Title                        = _notification.Title,
                 Subtitle                     = "",
                 Body                         = _notification.Text,
-                Data                         = string.IsNullOrEmpty(_notification.ChannelID) ? MercuryLibrarySO.LocalNotificationsDatabase.Channel_Default.ID : _notification.ChannelID,
+                Data                         = _notification.Data,
                 CategoryIdentifier           = _notification.ChannelID,
                 ThreadIdentifier             = _notification.ChannelID,
                 ShowInForeground             = true,
@@ -38,10 +38,13 @@ namespace Mercury.LocalNotifications
             iOSNotificationCenter.ScheduleNotification(notification);
         }
 
-        public string AppWasLaunchedViaNotificationChannel()
+        public bool ApplicationLaunchedViaNotification(out string data)
         {
             var intentData = iOSNotificationCenter.GetLastRespondedNotification();
-            return intentData != null ? intentData.Data : "";
+
+            data = intentData == null ? string.Empty : intentData.Data;
+
+            return data == string.Empty;
         }
         #endregion
     }

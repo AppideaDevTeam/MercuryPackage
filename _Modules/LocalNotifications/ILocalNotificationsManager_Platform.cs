@@ -7,7 +7,7 @@ namespace Mercury.LocalNotifications
         void Initialize();
         void CancelAllNotifications();
         void ScheduleNotification(LocalNotification _notification);
-        string AppWasLaunchedViaNotificationChannel();
+        bool ApplicationLaunchedViaNotification(out string data);
     }
 }
 #endif

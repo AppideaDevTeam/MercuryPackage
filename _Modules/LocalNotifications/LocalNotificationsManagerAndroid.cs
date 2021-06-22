@@ -29,17 +29,20 @@ namespace Mercury.LocalNotifications
             
             if (!string.IsNullOrEmpty(_notification.IconSmall)) notification.SmallIcon = _notification.IconSmall;
             if (!string.IsNullOrEmpty(_notification.IconLarge)) notification.LargeIcon = _notification.IconLarge;
-            if (!string.IsNullOrEmpty(_notification.Data)) notification.IntentData = targetChannelID;
+            if (!string.IsNullOrEmpty(_notification.Data)) notification.IntentData = _notification.Data;
 
             AndroidNotificationCenter.SendNotification(notification, targetChannelID);
         }
         
         public void CancelAllNotifications() => AndroidNotificationCenter.CancelAllNotifications();
         
-        public string AppWasLaunchedViaNotificationChannel()
+        public bool ApplicationLaunchedViaNotification(out string data)
         {
             var intentData = AndroidNotificationCenter.GetLastNotificationIntent();
-            return intentData != null ? intentData.Notification.IntentData : "";
+
+            data = intentData == null ? string.Empty : intentData.Notification.IntentData;
+
+            return data == string.Empty;
         }
         #endregion
         

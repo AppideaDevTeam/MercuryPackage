@@ -412,7 +412,7 @@ namespace Mercury.LocalNotifications
         #endregion
 
         #region INTENT
-        public static string AppWasLaunchedViaNotificationChannel() { return _platformManager.AppWasLaunchedViaNotificationChannel(); }
+        public static bool ApplicationLaunchedViaNotification(out string data) { return _platformManager.ApplicationLaunchedViaNotification(out data); }
 
         #endregion
 

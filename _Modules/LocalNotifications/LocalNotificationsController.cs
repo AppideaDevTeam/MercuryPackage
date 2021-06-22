@@ -25,11 +25,13 @@ namespace Mercury.LocalNotifications
             LocalNotificationsManager.LogMessage("All notifications canceled");
         }
 
-        public string AppWasLaunchedViaNotificationChannel()
+        public bool ApplicationLaunchedViaNotification(out string data)
         {
-            string channel = LocalNotificationsManager.AppWasLaunchedViaNotificationChannel();
-            LocalNotificationsManager.LogMessage($"Application was launched via channel: {channel}");
-            return channel;
+            bool launched = LocalNotificationsManager.ApplicationLaunchedViaNotification(out data);
+
+            LocalNotificationsManager.LogMessage($"Application was launched via notification, Data: {data}");
+
+            return launched;
         }
 
         #endregion
