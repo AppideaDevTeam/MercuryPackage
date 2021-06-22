@@ -163,7 +163,7 @@ namespace Mercury.LocalNotifications
 
                 for (var comparerB = comparerA + 1; comparerB < sortedList.Count; comparerB++)
                 {
-                    int deltaMinutes = (int) sortedList[comparerA + comparerB].FireTime.Subtract(sortedList[comparerA].FireTime).TotalMinutes;
+                    int deltaMinutes = (int) sortedList[comparerB].FireTime.Subtract(sortedList[comparerA].FireTime).TotalMinutes;
 
                     if (deltaMinutes < Database.FreeResourcesSpamPreventionThresholdMinutes)
                     {
