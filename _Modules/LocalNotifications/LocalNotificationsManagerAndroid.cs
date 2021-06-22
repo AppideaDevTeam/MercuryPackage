@@ -40,9 +40,16 @@ namespace Mercury.LocalNotifications
         {
             var intentData = AndroidNotificationCenter.GetLastNotificationIntent();
 
-            data = intentData == null ? string.Empty : intentData.Notification.IntentData;
+            if (intentData != null && !string.IsNullOrEmpty(intentData.Notification.IntentData))
+            {
+                data = intentData.Notification.IntentData;
 
-            return data == string.Empty;
+                return true;
+            }
+
+            data = string.Empty;
+
+            return false;
         }
         #endregion
         
