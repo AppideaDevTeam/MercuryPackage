@@ -42,9 +42,16 @@ namespace Mercury.LocalNotifications
         {
             var intentData = iOSNotificationCenter.GetLastRespondedNotification();
 
-            data = intentData == null ? string.Empty : intentData.Data;
+            if (intentData != null && !string.IsNullOrEmpty(intentData.Data))
+            {
+                data = intentData.Data;
 
-            return data == string.Empty;
+                return true;
+            }
+
+            data = string.Empty;
+
+            return false;
         }
         #endregion
     }
