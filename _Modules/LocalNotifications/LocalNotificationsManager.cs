@@ -213,6 +213,7 @@ namespace Mercury.LocalNotifications
                 {
                     Title         = editorData.EditorData.Title,
                     Text          = editorData.EditorData.Text.Replace("%Enemy%", _names[i]),
+                    Data          = _names[i],
                     IconSmall     = editorData.EditorData.iconSmall,
                     IconLarge     = editorData.EditorData.iconLarge,
                     FireTimeDelay = scheduledTimes[i],
