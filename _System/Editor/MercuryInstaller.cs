@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
+using UnityEditor.PackageManager;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace Mercury
 {
@@ -53,6 +57,61 @@ namespace Mercury
         {
             CreateScriptableObject<MercuryLibrarySO>();
         }
+
+        #region PACKAGE UPDATER
+        private static AddRequest updateRequest;
+        private static ListRequest listRequest;
+        private static bool packageInstallStatusValue;
+        private static bool packageInstallStatusFetched;
+        
+        [MenuItem("Tools/Mercury ֎/Update Package", priority = int.MaxValue)]
+        public static async Task UpdateSystemPackageRequest()
+        {
+            if (!await IsMercuryPackageInstalled())
+            {
+                MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Must Be Installed First!", LogType.Error);
+            }
+            
+            updateRequest                  =  Client.Add("https://github.com/AppideaDevTeam/MercuryPackage.git");
+            EditorApplication.update += UpdateSystemPackageProgress;
+        }
+        
+        private static void UpdateSystemPackageProgress()
+        {
+            if (updateRequest.IsCompleted)
+            {
+                if (updateRequest.Status == StatusCode.Success)
+                    MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Update Successfully Installed!");
+                else if (updateRequest.Status >= StatusCode.Failure)
+                    MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Update Failed!", LogType.Error);
+
+                EditorApplication.update -= UpdateSystemPackageProgress;
+            }
+        }
+
+        private static async Task<bool> IsMercuryPackageInstalled()
+        {
+            listRequest = Client.List();
+
+            EditorApplication.update += MercuryPackageInstallCheckProgress;
+
+            while (!packageInstallStatusFetched)  await Task.Delay(100);
+
+            return packageInstallStatusValue;
+        }
+
+        private static void MercuryPackageInstallCheckProgress()
+        {
+            if (listRequest.IsCompleted && listRequest.Status == StatusCode.Success)
+            {
+                packageInstallStatusValue = listRequest.Result.ToList().Exists(package => package.name == "com.mercury.mercury.modules");
+            }
+            
+            packageInstallStatusFetched = true;
+            
+            EditorApplication.update -= MercuryPackageInstallCheckProgress;
+        }
+        #endregion
     }
 }
 #endif
