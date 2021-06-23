@@ -156,15 +156,15 @@ namespace Mercury.LocalNotifications
     public class NotificationEditorData_Processes
     {
         public string                 Identifier;
-        public NotificationEditorData EditorData;
+        [SerializeField] public NotificationEditorData EditorData;
     }
 
     [Serializable]
     public class NotificationEditorData
     {
-        [HorizontalGroup("Group"), TitleGroup("Group/Title Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TitleValueChanged")]
+        [SerializeField, HorizontalGroup("Group"), TitleGroup("Group/Title Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TitleValueChanged")]
         public string titleBuffer;
-        [HorizontalGroup("Group"), TitleGroup("Group/Title Preview"), HideLabel, MultiLineProperty(3), ReadOnly, GUIColor("@MercuryLibrarySO.Color_Violet")]
+        [SerializeField, HorizontalGroup("Group"), TitleGroup("Group/Title Preview"), HideLabel, MultiLineProperty(3), ReadOnly, GUIColor("@MercuryLibrarySO.Color_Violet")]
         public string titlePreview;
         [HorizontalGroup("Group"), TitleGroup("Group/Text Buffer"), HideLabel, MultiLineProperty(3), OnValueChanged("TextValueChanged")]
         public string textBuffer;
@@ -186,20 +186,20 @@ namespace Mercury.LocalNotifications
 
                 _text = unescaped;
             }
-
+            
             return Uri.EscapeDataString(_text);
         }
         
         public void TitleValueChanged(string buffer)
         {
-            titlePreview = buffer;
             titleBuffer  = SafeEscapeDataString(buffer);
+            titlePreview = Title;
         }
 
         public void TextValueChanged(string buffer)
         {
-            textPreview = buffer;
             textBuffer  = SafeEscapeDataString(buffer);
+            textPreview = Text;
         }
     }
 

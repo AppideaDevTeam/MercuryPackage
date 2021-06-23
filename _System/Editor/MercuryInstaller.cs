@@ -64,7 +64,7 @@ namespace Mercury
         private static bool packageInstallStatusValue;
         private static bool packageInstallStatusFetched;
         
-        [MenuItem("Tools/Mercury ֎/Update Package %#M", priority = int.MaxValue)]
+        [MenuItem("Tools/Mercury ֎/Update Package %&#M", priority = int.MaxValue)]
         public static async void UpdateSystemPackageRequest()
         {
             if (await IsMercuryPackageInstalled())
