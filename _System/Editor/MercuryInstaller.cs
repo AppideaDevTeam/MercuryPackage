@@ -63,10 +63,18 @@ namespace Mercury
         private static ListRequest listRequest;
         private static bool packageInstallStatusValue;
         private static bool packageInstallStatusFetched;
+        private static bool packageInstallInProgress;
         
         [MenuItem("Tools/Mercury ֎/Update Package %&#M", priority = int.MaxValue)]
         public static async void UpdateSystemPackageRequest()
         {
+            if (packageInstallInProgress)
+            {
+                EditorUtility.DisplayDialog("Mercury Package Update", "Mercury Package is already being updated", "OK");
+
+                return;
+            }
+
             if (await IsMercuryPackageInstalled())
             {
                 MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Update In Progress!");
@@ -77,6 +85,8 @@ namespace Mercury
                 {
                     updateRequest = Client.Add("https://github.com/AppideaDevTeam/MercuryPackage.git");
                     EditorApplication.update += UpdateSystemPackageProgress;
+
+                    packageInstallInProgress = true;
                 }
             }
             else
@@ -95,6 +105,8 @@ namespace Mercury
                     MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Update Failed!", LogType.Error);
 
                 EditorApplication.update -= UpdateSystemPackageProgress;
+
+                packageInstallInProgress = false;
             }
         }
 
