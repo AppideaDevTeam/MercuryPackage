@@ -214,7 +214,7 @@ namespace Mercury.LocalNotifications
                         int priorityA = GetPriorityOfFreeResourcesNotification(notif1.Identifier);
                         int priorityB = GetPriorityOfFreeResourcesNotification(notif2.Identifier);
 
-                        return priorityA - priorityB;
+                        return priorityB - priorityA;
                     });
                     
                     finalfilteredList.Add(localSpamList.First());
