@@ -121,7 +121,10 @@ namespace Mercury.LocalNotifications
         #region FREE RESOURCES
         public static void ScheduleFreeResourcesNotifications(List<NotificationInfo_FreeResources> _notificationInfos)
         {
-            var filteredNotifications = FilterFreeResourcesNotifications(_notificationInfos);
+            var filteredNotifications = _notificationInfos;
+            
+            // IF SPAM PREVENTION ENABLED
+            if (Database.FreeResourcesSpamPreventionEnabled) filteredNotifications = FilterFreeResourcesNotifications(_notificationInfos);
 
             foreach (var notificationInfo in filteredNotifications)
             {
@@ -162,36 +165,46 @@ namespace Mercury.LocalNotifications
 
         private static List<NotificationInfo_FreeResources> FilterFreeResourcesNotifications(List<NotificationInfo_FreeResources> _notificationInfos)
         {
+            // SORT INPUT LIST WITH FIRETIME
             var sortedList = new List<NotificationInfo_FreeResources>(_notificationInfos);
             sortedList.Sort((notif1, notif2) => (int) notif1.FireTime.TotalMinutes - (int) notif2.FireTime.TotalMinutes);
+            
+            // CREATE NEW FILTERED LIST
+            List<NotificationInfo_FreeResources> finalfilteredList = new List<NotificationInfo_FreeResources>();
 
-            // FILTERED LIST
-            List<NotificationInfo_FreeResources> filteredList = new List<NotificationInfo_FreeResources>();
-
-            for (var comparerA = 0; comparerA < sortedList.Count; comparerA++)
+            // ------------------------ OUTER LOOP ------------------------
+            for (var comparerA = 0; comparerA < sortedList.Count;)
             {
-                // IF LAST ELEMENT
-                if (comparerA + 1 == sortedList.Count) break;
-
                 List<NotificationInfo_FreeResources> localSpamList = new List<NotificationInfo_FreeResources>();
 
+                // ------------------------ INNER COMPARER LOOP ------------------------
                 for (var comparerB = comparerA + 1; comparerB < sortedList.Count; comparerB++)
                 {
-                    // მაწონი
                     int deltaMinutes = (int) sortedList[comparerB].FireTime.Subtract(sortedList[comparerA].FireTime).TotalMinutes;
-
+                    
                     if (deltaMinutes < Database.FreeResourcesSpamPreventionThresholdMinutes)
                     {
+                        // IF COMPARER IS IN THE SPAM THRESHOLD RANGE, ADD BOTH IN LOCAL SPAM LIST
                         if (!localSpamList.Contains(sortedList[comparerA])) localSpamList.Add(sortedList[comparerA]);
                         if (!localSpamList.Contains(sortedList[comparerB])) localSpamList.Add(sortedList[comparerB]);
                     }
+                    else
+                    {
+                        // IF COMPARER IS OUT OF THE SPAM THRESHOLD RANGE
+                        break;
+                    }
                 }
 
-                // ADD VALUES TO FILTERED LIST
+                // ------------------------ ADD VALUES TO FILTERED LIST ------------------------
+                
+                // IF OUTER ELEMENT DIDN'T CONFLICT WITH ANY INNER
                 if (localSpamList.IsNullOrEmpty())
                 {
                     // IF SOLO
-                    filteredList.Add(sortedList[comparerA]);
+                    finalfilteredList.Add(sortedList[comparerA]);
+                    
+                    // OUTER LOOP NEXT ITERATION
+                    comparerA += 1;
                 }
                 else
                 {
@@ -203,12 +216,14 @@ namespace Mercury.LocalNotifications
 
                         return priorityA - priorityB;
                     });
-
-                    filteredList.Add(localSpamList.First());
+                    
+                    finalfilteredList.Add(localSpamList.First());
+                    
+                    // SKIP OUTER LOOP LOCAL SPAM LIST
+                    comparerA += localSpamList.Count;
                 }
             }
-            
-            return filteredList;
+            return finalfilteredList;
         }
         
 
@@ -318,7 +333,7 @@ namespace Mercury.LocalNotifications
 
             if (!_data.IsNullOrEmpty())
                 foreach (var entry in _data)
-                    processedBuffer.Replace($"%{entry.Tag}%", entry.Value);
+                    processedBuffer = processedBuffer.Replace($"%{entry.Tag}%", entry.Value);
 
             return processedBuffer;
         }
