@@ -64,16 +64,18 @@ namespace Mercury
         private static bool packageInstallStatusValue;
         private static bool packageInstallStatusFetched;
         
-        [MenuItem("Tools/Mercury ֎/Update Package", priority = int.MaxValue)]
-        public static async Task UpdateSystemPackageRequest()
+        [MenuItem("Tools/Mercury ֎/Update Package %#M", priority = int.MaxValue)]
+        public static async void UpdateSystemPackageRequest()
         {
-            if (!await IsMercuryPackageInstalled())
+            if (await IsMercuryPackageInstalled())
             {
-                MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Must Be Installed First!", LogType.Error);
+                updateRequest            =  Client.Add("https://github.com/AppideaDevTeam/MercuryPackage.git");
+                EditorApplication.update += UpdateSystemPackageProgress;
             }
-            
-            updateRequest                  =  Client.Add("https://github.com/AppideaDevTeam/MercuryPackage.git");
-            EditorApplication.update += UpdateSystemPackageProgress;
+            else
+            {
+                MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Should Be Installed As Package In The First Place!", LogType.Error);
+            }
         }
         
         private static void UpdateSystemPackageProgress()
@@ -102,14 +104,17 @@ namespace Mercury
 
         private static void MercuryPackageInstallCheckProgress()
         {
-            if (listRequest.IsCompleted && listRequest.Status == StatusCode.Success)
+            if (listRequest.IsCompleted)
             {
-                packageInstallStatusValue = listRequest.Result.ToList().Exists(package => package.name == "com.mercury.mercury.modules");
+                if (listRequest.Status == StatusCode.Success)
+                {
+                    packageInstallStatusValue = listRequest.Result.ToList().Exists(package => package.name == "com.mercury.mercury.modules");
+                    
+                    EditorApplication.update -= MercuryPackageInstallCheckProgress;
+                }
+                
+                packageInstallStatusFetched = true;
             }
-            
-            packageInstallStatusFetched = true;
-            
-            EditorApplication.update -= MercuryPackageInstallCheckProgress;
         }
         #endregion
     }
