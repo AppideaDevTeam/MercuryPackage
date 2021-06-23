@@ -111,10 +111,10 @@ namespace Mercury
                 if (listRequest.Status == StatusCode.Success)
                 {
                     packageInstallStatusValue = listRequest.Result.ToList().Exists(package => package.name == "com.mercury.mercury.modules");
-                    
-                    EditorApplication.update -= MercuryPackageInstallCheckProgress;
                 }
-                
+
+                EditorApplication.update -= MercuryPackageInstallCheckProgress;
+
                 packageInstallStatusFetched = true;
             }
         }
