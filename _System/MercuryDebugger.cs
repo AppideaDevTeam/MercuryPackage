@@ -38,7 +38,7 @@ namespace Mercury
                 case LogType.Info: Debug.Log(logText); break;
                 case LogType.Warning: Debug.LogWarning(logText); break;
                 case LogType.Error: Debug.LogError(logText); break;
-                case LogType.Exception: throw new Exception(logText);
+                case LogType.Exception: Debug.LogException(new Exception(logText)); break;
             }
 
             registeredLoggers?.Invoke(_message);

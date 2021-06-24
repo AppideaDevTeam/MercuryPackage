@@ -63,16 +63,31 @@ namespace Mercury
         private static ListRequest listRequest;
         private static bool packageInstallStatusValue;
         private static bool packageInstallStatusFetched;
+        private static bool packageInstallInProgress;
         
         [MenuItem("Tools/Mercury ֎/Update Package %&#M", priority = int.MaxValue)]
         public static async void UpdateSystemPackageRequest()
         {
+            if (packageInstallInProgress)
+            {
+                EditorUtility.DisplayDialog("Mercury Package Update", "Mercury Package is already being updated", "OK");
+
+                return;
+            }
+
             if (await IsMercuryPackageInstalled())
             {
                 MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Update In Progress!");
-                
-                updateRequest            =  Client.Add("https://github.com/AppideaDevTeam/MercuryPackage.git");
-                EditorApplication.update += UpdateSystemPackageProgress;
+
+                bool updatePackage = EditorUtility.DisplayDialog("Mercury Package Update", "Are you sure you want to update Mercury Package?", "Update", "Cancel");
+
+                if (updatePackage)
+                {
+                    updateRequest = Client.Add("https://github.com/AppideaDevTeam/MercuryPackage.git");
+                    EditorApplication.update += UpdateSystemPackageProgress;
+
+                    packageInstallInProgress = true;
+                }
             }
             else
             {
@@ -90,6 +105,8 @@ namespace Mercury
                     MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Update Failed!", LogType.Error);
 
                 EditorApplication.update -= UpdateSystemPackageProgress;
+
+                packageInstallInProgress = false;
             }
         }
 
@@ -111,10 +128,10 @@ namespace Mercury
                 if (listRequest.Status == StatusCode.Success)
                 {
                     packageInstallStatusValue = listRequest.Result.ToList().Exists(package => package.name == "com.mercury.mercury.modules");
-                    
-                    EditorApplication.update -= MercuryPackageInstallCheckProgress;
                 }
-                
+
+                EditorApplication.update -= MercuryPackageInstallCheckProgress;
+
                 packageInstallStatusFetched = true;
             }
         }
