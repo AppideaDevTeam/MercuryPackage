@@ -90,7 +90,7 @@ namespace Mercury.LocalNotifications
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
                             FireTimeDelay = notificationInfo.FireTime,
-                            ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : "periodic"
+                            ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_PeriodicRewards.ID
                         };
             
                         ScheduleLocalNotification(notification, true);
@@ -142,7 +142,7 @@ namespace Mercury.LocalNotifications
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfoData),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfoData),
                             FireTimeDelay = notificationInfo.FireTime,
-                            ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : "free_resources"
+                            ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_FreeResources.ID
                         };
 
                         ScheduleLocalNotification(notification, true);
@@ -247,7 +247,7 @@ namespace Mercury.LocalNotifications
                     IconSmall     = editorData.EditorData.iconSmall,
                     IconLarge     = editorData.EditorData.iconLarge,
                     FireTimeDelay = scheduledTimes[i],
-                    ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : "enemy_connected"
+                    ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_EnemyConnected.ID
                 };
 
                 ScheduleLocalNotification(notification, false);
@@ -312,7 +312,7 @@ namespace Mercury.LocalNotifications
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
                             FireTimeDelay = notificationInfo.FireTime,
-                            ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : "processes_rewards"
+                            ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_Processes.ID
                         };
 
                         ScheduleLocalNotification(notification, true);
@@ -382,7 +382,8 @@ namespace Mercury.LocalNotifications
                         Data          = $"{NotificationType.Reminder}:_dayIndex",
                         IconSmall     = notificationIconSmall,
                         IconLarge     = notificationIconLarge,
-                        FireTimeDelay = fireTimeDelay
+                        FireTimeDelay = fireTimeDelay,
+                        ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_Reminders.ID
                     };
 
                     ScheduleLocalNotification(notification, false);
