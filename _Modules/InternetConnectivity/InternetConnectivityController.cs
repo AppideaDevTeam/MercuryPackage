@@ -1,6 +1,7 @@
 #if MERCURY_INTERNETCONNECTIVITY
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -129,9 +130,11 @@ namespace Mercury.InternetConnectivity
             
             while (Database.TimePeriodicRenewal)
             {
+                Task fetchTask = Task.Run(InternetConnectivityManager.FetchInternetTime);
+                while (!fetchTask.IsCompleted) yield return null;
+
                 yield return waiter;
-                InternetConnectivityManager.FetchInternetTime();
-                
+
                 if(TimeInfo.WasRenewed) InternetTimeRenewed(InternetConnectivityManager.CalculateCurrentTime());
                 else InternetTimeNotRenewed();
                 
