@@ -77,7 +77,7 @@ namespace Mercury
 
             if (await IsMercuryPackageInstalled())
             {
-                bool updatePackage = EditorUtility.DisplayDialog("Mercury Package Update", "Are you`` sure you want to update Mercury Package?", "Update", "Cancel");
+                bool updatePackage = EditorUtility.DisplayDialog("Mercury Package Update", "Are you sure you want to update Mercury Package?", "Update", "Cancel");
 
                 if (updatePackage)
                 {
