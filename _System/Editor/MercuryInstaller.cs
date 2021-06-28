@@ -77,12 +77,12 @@ namespace Mercury
 
             if (await IsMercuryPackageInstalled())
             {
-                MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Update In Progress!");
-
-                bool updatePackage = EditorUtility.DisplayDialog("Mercury Package Update", "Are you sure you want to update Mercury Package?", "Update", "Cancel");
+                bool updatePackage = EditorUtility.DisplayDialog("Mercury Package Update", "Are you`` sure you want to update Mercury Package?", "Update", "Cancel");
 
                 if (updatePackage)
                 {
+                    MercuryDebugger.LogMessage(LogModule.Core, $"Mercury Package Update In Progress!");
+
                     updateRequest = Client.Add("https://github.com/AppideaDevTeam/MercuryPackage.git");
                     EditorApplication.update += UpdateSystemPackageProgress;
 
