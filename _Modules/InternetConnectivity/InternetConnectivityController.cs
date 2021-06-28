@@ -123,6 +123,8 @@ namespace Mercury.InternetConnectivity
         {
             WaitForSeconds waiter = new WaitForSeconds(Database.TimePeriodicRenewalInterval);
             InternetConnectivityManager.FetchInternetTime();
+            InternetConnectivityManager.UpdateInternetTimeLastFetchTime();
+
             InternetConnectivityManager.LogMessage($"Time Periodic Renewal Started... {TimeInfo.DateTime.ToString_HHMMSS()}");
 
             if(TimeInfo.WasFetched)InternetTimeFetched(InternetConnectivityManager.CalculateCurrentTime());
@@ -132,6 +134,7 @@ namespace Mercury.InternetConnectivity
             {
                 Task fetchTask = Task.Run(InternetConnectivityManager.FetchInternetTime);
                 while (!fetchTask.IsCompleted) yield return null;
+                InternetConnectivityManager.UpdateInternetTimeLastFetchTime();
 
                 yield return waiter;
 

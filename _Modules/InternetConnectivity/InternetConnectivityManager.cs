@@ -15,7 +15,7 @@ namespace Mercury.InternetConnectivity
 
         private static List<TcpServerEntry>           TcpServerEntries;
         private static List<TimeServerEntry>          TimeServerEntries;
-        
+
         internal static TimeInfo TimeInfo { get; private set; }
         internal static ConnectionInfo ConnectionInfo { get; private set; }
         public static bool IsInitialized { get; private set; }
@@ -222,8 +222,9 @@ namespace Mercury.InternetConnectivity
             TimeInfo.WasRenewed = timeServerStatus.Success && TimeInfo.WasFetched;
             TimeInfo.WasFetched = timeServerStatus.Success;
             TimeInfo.DateTime = timeServerStatus.LocalDateTime;
-            TimeInfo.LastFetchTime = Time.realtimeSinceStartup;
         }
+
+        internal static void UpdateInternetTimeLastFetchTime() => TimeInfo.LastFetchTime = Time.realtimeSinceStartup;
         
         internal static DateTime CalculateCurrentTime()
         {
