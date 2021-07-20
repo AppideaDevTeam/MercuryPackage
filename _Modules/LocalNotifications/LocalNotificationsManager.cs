@@ -38,7 +38,7 @@ namespace Mercury.LocalNotifications
             #if UNITY_ANDROID
             _platformManager = new LocalNotificationsManagerAndroid();
             #elif UNITY_IOS
-            _platformManager = new LocalNotificationManager_iOS();
+            _platformManager = new LocalNotificationsManagerIos();
             #else
             LogMessage("Notifications for current platform are not supported.", LogType.Exception);
             #endif
