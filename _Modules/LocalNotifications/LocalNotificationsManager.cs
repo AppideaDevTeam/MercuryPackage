@@ -11,6 +11,7 @@ namespace Mercury.LocalNotifications
 {
     public enum NotificationType
     {
+        Undefined,
         Custom,   
         Periodic,
         FreeResources,
@@ -86,7 +87,7 @@ namespace Mercury.LocalNotifications
                         {
                             Title         = ProcessBufferTaggedData(txt.EditorData.Title, notificationInfo.Data),
                             Text          = ProcessBufferTaggedData(txt.EditorData.Text,  notificationInfo.Data),
-                            Data          = $"Periodic:{notificationInfo.Period}",
+                            Data          = $"{NotificationType.Periodic}:{notificationInfo.Period}",
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
                             FireTimeDelay = notificationInfo.FireTime,
@@ -479,17 +480,19 @@ namespace Mercury.LocalNotifications
 
         public ApplicationLaunchIntent(string _rawData)
         {
-            HasIntent = !string.IsNullOrEmpty(_rawData);
+            if (!string.IsNullOrEmpty(_rawData) && _rawData.Length >= 3 && _rawData.Contains(':'))
+            {
+                int separatorIndex = _rawData.IndexOf(':');
+                string typeText = _rawData.Substring(0, separatorIndex);
 
-            if (!HasIntent) return;
-
-            int separatorIndex = _rawData.IndexOf(':');
-
-            string typeText = _rawData.Substring(0, separatorIndex);
-
-            Type = (NotificationType) Enum.Parse(typeof(NotificationType), typeText, true);
-
-            Data = _rawData.Substring(separatorIndex + 1, _rawData.Length - separatorIndex);
+                Type = (NotificationType) Enum.Parse(typeof(NotificationType), typeText, true);
+                Data = _rawData.Substring(separatorIndex + 1, _rawData.Length - separatorIndex);    
+            }
+            else
+            {
+                Type = NotificationType.Undefined;
+                Data = string.Empty;
+            }
         }
     }
     
