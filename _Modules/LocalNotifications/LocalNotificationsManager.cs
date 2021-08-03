@@ -480,19 +480,21 @@ namespace Mercury.LocalNotifications
 
         public ApplicationLaunchIntent(string _rawData)
         {
-            if (!string.IsNullOrEmpty(_rawData) && _rawData.Length >= 3 && _rawData.Contains(':'))
+            Type = NotificationType.Undefined;
+            
+            if (!string.IsNullOrEmpty(_rawData))
             {
-                int separatorIndex = _rawData.IndexOf(':');
-                string typeText = _rawData.Substring(0, separatorIndex);
+                if (_rawData.Length >= 3 && _rawData.Contains(':'))
+                {
+                    int separatorIndex = _rawData.IndexOf(':');
+                    string typeText = _rawData.Substring(0, separatorIndex);
 
-                Type = (NotificationType) Enum.Parse(typeof(NotificationType), typeText, true);
-                Data = _rawData.Substring(separatorIndex + 1, _rawData.Length - separatorIndex);    
+                    Type = (NotificationType) Enum.Parse(typeof(NotificationType), typeText, true);
+                    Data = _rawData.Substring(separatorIndex + 1, _rawData.Length - separatorIndex);
+                }
+                else Data = _rawData;
             }
-            else
-            {
-                Type = NotificationType.Undefined;
-                Data = string.Empty;
-            }
+            else Data = string.Empty;
         }
     }
     
