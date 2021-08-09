@@ -380,7 +380,7 @@ namespace Mercury.LocalNotifications
                     {
                         Title         = notificationTitle,
                         Text          = notificationDescription,
-                        Data          = $"{NotificationType.Reminder}:_dayIndex",
+                        Data          = $"{NotificationType.Reminder}:{_dayIndex}",
                         IconSmall     = notificationIconSmall,
                         IconLarge     = notificationIconLarge,
                         FireTimeDelay = fireTimeDelay,
