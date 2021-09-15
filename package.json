@@ -1,6 +1,6 @@
 {
   "name": "com.mercury.mercury.modules",
-  "version": "0.1.5-preview",
+  "version": "0.1.6",
   "displayName": "Mercury",
   "description": "Mercury system with modules",
   "unity": "2020.3",
