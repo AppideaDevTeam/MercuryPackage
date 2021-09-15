@@ -1,6 +1,6 @@
 {
   "name": "com.mercury.mercury.modules",
-  "version": "1.0.1",
+  "version": "0.1.0-preview.1",
   "displayName": "Mercury",
   "description": "Mercury system with modules",
   "unity": "2020.3",
@@ -21,10 +21,5 @@
     "url": "https://www.unity3d.com"
   },
   "type": "library",
-  "hideInEditor": false,
-  "repository": {
-    "url": "https://github.com/AppideaDevTeam/MercuryPackage.git",
-    "type": "git",
-    "revision": "5d1df5f0ef0d23a255a12a198a959f76a4282bb3"
-  }
+  "hideInEditor": false
 }
