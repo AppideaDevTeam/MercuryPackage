@@ -14,6 +14,10 @@ namespace Mercury
         #if MERCURY_INTERNETCONNECTIVITY
         InternetConnectivity
         #endif
+        
+        #if MERCURY_SCENEMANAGEMENT
+        SceneManagement
+        #endif
     }
 
     internal enum LogType

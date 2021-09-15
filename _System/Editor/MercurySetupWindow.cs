@@ -29,6 +29,11 @@ namespace Mercury
         [MenuItem("Tools/Mercury ֎/Create Database/Internet Connectivity")]
         public static void CreateInternetConnectivityDatabase() => MercuryInstaller.CreateScriptableObject<InternetConnectivity.InternetConnectivityDatabaseSO>();
         #endif
+        
+        #if MERCURY_SCENEMANAGEMENT
+        [MenuItem("Tools/Mercury ֎/Create Database/Scene Management")]
+        public static void CreateSceneManagementDatabase() => MercuryInstaller.CreateScriptableObject<SceneManagement.SceneManagementDatabaseSO>();
+        #endif
         #endregion
         
         protected override void OnDestroy()
@@ -49,6 +54,10 @@ namespace Mercury
             
             #if MERCURY_INTERNETCONNECTIVITY
             AddtoHierarchy<InternetConnectivity.InternetConnectivityDatabaseSO>(tree, "Modules/Internet Connectivity", MercuryEditorIcons.InternetConnectivity);
+            #endif
+            
+            #if MERCURY_SCENEMANAGEMENT
+            AddtoHierarchy<SceneManagement.SceneManagementDatabaseSO>(tree, "Modules/Scene Management", MercuryEditorIcons.SceneManagement);
             #endif
         
             return tree;

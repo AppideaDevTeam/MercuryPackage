@@ -26,6 +26,7 @@ namespace Mercury
         #region VARIABLES
         public ModuleSetting Module_LocalNotifications = new ModuleSetting("Local Notifications", "MERCURY_LOCALNOTIFICATIONS");
         public ModuleSetting Module_InternetConnectivity = new ModuleSetting("Internet Connectivity", "MERCURY_INTERNETCONNECTIVITY");
+        public ModuleSetting Module_SceneManagement = new ModuleSetting("Scene Management", "MERCURY_SCENEMANAGEMENT");
         #endregion
 
         [Serializable]
@@ -80,6 +81,13 @@ namespace Mercury
         
         [TitleGroup("Scriptable Object References"), LabelText("Internet Connectivity"), LabelWidth(200)] 
         public InternetConnectivity.InternetConnectivityDatabaseSO internetConnectivityDatabase;
+        #endif
+        
+        #if MERCURY_SCENEMANAGEMENT
+        public static SceneManagement.SceneManagementDatabaseSO SceneManagementDatabaseDatabase => GetModuleDatabase(Instance.sceneManagementDatabaseDatabase);
+        
+        [TitleGroup("Scriptable Object References"), LabelText("Scene Management"), LabelWidth(200)] 
+        public SceneManagement.SceneManagementDatabaseSO sceneManagementDatabaseDatabase;
         #endif
 
         #endregion
