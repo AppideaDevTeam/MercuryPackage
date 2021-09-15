@@ -1,6 +1,6 @@
 {
   "name": "com.mercury.mercury.modules",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Mercury",
   "description": "Mercury system with modules",
   "unity": "2020.3",
@@ -25,6 +25,6 @@
   "repository": {
     "url": "https://github.com/AppideaDevTeam/MercuryPackage.git",
     "type": "git",
-    "revision": "2b5fbcd2975b47271675e5c371959c98ae9f3b91"
+    "revision": "5d1df5f0ef0d23a255a12a198a959f76a4282bb3"
   }
 }
