@@ -115,29 +115,30 @@ namespace Mercury.InternetConnectivity
         {
             var status = false;
 
-            using var tcpClient = new TcpClient();
-            
-            try
+            using (var tcpClient = new TcpClient())
             {
-                var connectTask = tcpClient.ConnectAsync(ipAddress, _port);
-                
-                if (connectTask.Wait(TimeSpan.FromMilliseconds((int)Database.TcpServerTimeoutMilliseconds)))
+                try
                 {
-                    status = true;
+                    var connectTask = tcpClient.ConnectAsync(ipAddress, _port);
+                
+                    if (connectTask.Wait(TimeSpan.FromMilliseconds((int)Database.TcpServerTimeoutMilliseconds)))
+                    {
+                        status = true;
 
-                    LogMessage($"Successful connection to IP address: {ipAddress}");
+                        LogMessage($"Successful connection to IP address: {ipAddress}");
+                    }
+                    else
+                    {                
+                        LogMessage($"Unsuccessful connection to IP address: {ipAddress}");
+                    }
                 }
-                else
-                {                
-                    LogMessage($"Unsuccessful connection to IP address: {ipAddress}");
+                catch
+                {
+                    LogMessage($"Failed to connection to IP address: {ipAddress}");
                 }
-            }
-            catch
-            {
-                LogMessage($"Failed to connection to IP address: {ipAddress}");
-            }
 
-            tcpClient.Close();
+                tcpClient.Close();   
+            }
 
             return status;
         }
@@ -194,19 +195,21 @@ namespace Mercury.InternetConnectivity
 
             try
             {
-                using var tcpClient = new TcpClient(_hostName, 13);
+                using (var tcpClient = new TcpClient(_hostName, 13))
+                {
+                    using (var streamReader = new StreamReader(tcpClient.GetStream()))
+                    {
+                        var responseString = streamReader.ReadToEnd();
 
-                using var streamReader = new StreamReader(tcpClient.GetStream());
+                        var localDateTime = ParseTimeServerResponse(responseString);
 
-                var responseString = streamReader.ReadToEnd();
+                        status.Success       = true;
+                        status.LocalDateTime = localDateTime;
 
-                var localDateTime = ParseTimeServerResponse(responseString);
-
-                status.Success       = true;
-                status.LocalDateTime = localDateTime;
-
-                streamReader.Close();
-                tcpClient.Close();
+                        streamReader.Close();
+                        tcpClient.Close();    
+                    }
+                }
             }
             catch
             {
