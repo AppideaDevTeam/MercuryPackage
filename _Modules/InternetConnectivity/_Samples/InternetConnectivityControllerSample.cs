@@ -14,12 +14,6 @@ namespace Mercury.InternetConnectivity
             logBuffer += $"{_message}\n";
         }
 
-        [ContextMenu("Zoro")]
-        public void Zoro()
-        {
-            SceneManager.LoadScene(0);
-        }
-        
         private void OnGUI()
         {
             GUI.skin.label.fontSize = 35;

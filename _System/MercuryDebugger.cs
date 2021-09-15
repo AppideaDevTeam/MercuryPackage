@@ -12,7 +12,7 @@ namespace Mercury
         #endif
             
         #if MERCURY_INTERNETCONNECTIVITY
-        InternetConnectivity
+        InternetConnectivity,
         #endif
         
         #if MERCURY_SCENEMANAGEMENT
