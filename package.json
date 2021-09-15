@@ -1,10 +1,9 @@
 {
   "name": "com.mercury.mercury.modules",
-  "version": "0.1.4-preview",
+  "version": "0.1.5-preview",
   "displayName": "Mercury",
   "description": "Mercury system with modules",
   "unity": "2020.3",
-  "unityRelease": "8f1",
   "documentationUrl": "https://example.com/",
   "changelogUrl": "https://github.com/AppideaDevTeam/MercuryPackage/blob/main/CHANGELOG.md",
   "licensesUrl": "https://example.com/licensing.html",
@@ -20,7 +19,6 @@
     "email": "maroon3d@gmail.com",
     "url": "https://www.unity3d.com"
   },
-  "type": "library",
   "hideInEditor": false,
   "repository": {
     "url": "https://github.com/AppideaDevTeam/MercuryPackage.git",
