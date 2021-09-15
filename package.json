@@ -21,5 +21,10 @@
     "url": "https://www.unity3d.com"
   },
   "type": "library",
-  "hideInEditor": false
+  "hideInEditor": false,
+  "repository": {
+    "url": "https://github.com/AppideaDevTeam/MercuryPackage.git",
+    "type": "git",
+    "revision": "2b5fbcd2975b47271675e5c371959c98ae9f3b91"
+  }
 }
