@@ -1,12 +1,19 @@
-## [0.1.2-preview] - 2019-01-29
+# Changelog
 
-### ADDED
-- Added changelog to the package
+All notable changes to this project will be documented in this file.
 
-## [0.1.1-preview] - 2021-09-15
+### [0.1.3-preview] - 2019-09-15
 
-### DUMMY UPDATE
+- Dummy update
 
-## [0.1.0-preview] - 2021-09-15
+### [0.1.2-preview] - 2019-09-15
 
-### This is the first release of the MERCURY MODULES
+- Added changelog
+
+### [0.1.1-preview] - 2019-09-15
+
+- Dummy update (Integrating version controls)
+
+### [0.1.0-preview] - 2019-09-15
+
+- Initial Release
