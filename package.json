@@ -4,9 +4,17 @@
   "displayName": "Mercury",
   "description": "Mercury system with modules",
   "unity": "2020.3",
+  "unityRelease": "8f1",
   "documentationUrl": "https://example.com/",
-  "changelogUrl": "https://github.com/AppideaDevTeam/MercuryPackage/blob/main/CHANGELOG.md",
+  "changelogUrl": "https://example.com/changelog.html",
   "licensesUrl": "https://example.com/licensing.html",
+  "scopedRegistries": {
+    "name": "Mercury",
+    "url": "https://github.com/AppideaDevTeam/MercuryPackage",
+    "scopes": [
+      "com.mercury", "com.mercury.mercury.modules"
+    ]
+  },
   "dependencies": {
     "com.unity.mobile.notifications": "1.3.2"
   },
@@ -19,9 +27,6 @@
     "email": "maroon3d@gmail.com",
     "url": "https://www.unity3d.com"
   },
-  "hideInEditor": false,
-  "repository": {
-    "url": "https://github.com/AppideaDevTeam/MercuryPackage.git",
-    "type": "git"
-  }
+  "type": "library",
+  "hideInEditor": false
 }
