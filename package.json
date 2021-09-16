@@ -8,8 +8,7 @@
   "changelogUrl": "https://github.com/AppideaDevTeam/MercuryPackage/blob/main/CHANGELOG.md",
   "licensesUrl": "https://example.com/licensing.html",
   "dependencies": {
-    "com.unity.mobile.notifications": "1.3.2",
-    "MMM": "https://github.com/AppideaDevTeam/MercuryPackage#3c327c29c9c7666ee7b0eca91fd01bbb5aab110c"
+    "com.unity.mobile.notifications": "1.3.2"
   },
   "keywords": [
     "Mercury",
