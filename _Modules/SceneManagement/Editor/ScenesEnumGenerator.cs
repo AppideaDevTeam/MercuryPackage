@@ -4,11 +4,13 @@ using UnityEditor;
 using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using Mercury;
+using UnityEngine;
 
-public static class GenerateScenesEnum
+public static class ScenesEnumGenerator
 {
-    private static string sceneEnumContainerAssetName = "ScenesEnumContainer";
-    private static string enumName = "Scenes";
+    private const string sceneEnumContainerAssetName = "ScenesEnumContainer";
+    private const string enumName = "Scenes";
     
     // Get scene names from build settings
     public static List<string> GetScenesFromBuildSettings()
@@ -20,9 +22,18 @@ public static class GenerateScenesEnum
         return scenes;
     }
     
-    [MenuItem("Tools/Appidea/Update Scenes Enum")]
-    static void ExampleScript()
+    public static void ExampleScript()
     {
+        string enumContainerPath = MercuryInstaller.mercuryResourcesPath + MercuryLibrarySO.Instance.Module_SceneManagement.Name + "/" + sceneEnumContainerAssetName + ".cs";
+
+        // CREATE NEW FILE IF DOESN'T EXIST
+        if (!File.Exists(enumContainerPath))
+        {
+            File.WriteAllText(enumContainerPath,string.Empty);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
         // GET ASSET GUIDS
         string[] guids = AssetDatabase.FindAssets(sceneEnumContainerAssetName);
         
@@ -62,7 +73,8 @@ public static class GenerateScenesEnum
     // Generate enum string data
     private static string GenerateEnumStringData(string[] _enumEntries)
     {
-        string body = "// Use INSTEAD Tools/Appidea/UpdateScenesEnum to update this enum";
+        string body = "#if MERCURY_SCENEMANAGEMENT";
+        body += "\n // Use INSTEAD Tools/Appidea/UpdateScenesEnum to update this enum";
         body += "\n public enum " + enumName;
         body += "\n {";
         
@@ -72,6 +84,7 @@ public static class GenerateScenesEnum
         }
         
         body += "\n }";
+        body += "\n #endif";
 
         return body;
     }

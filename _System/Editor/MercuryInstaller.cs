@@ -14,6 +14,8 @@ namespace Mercury
     [InitializeOnLoad]
     internal static class MercuryInstaller
     {
+        public const string mercuryResourcesPath = "Assets/Plugins/_Mercury/Resources/";
+        
         public static void Install(string _definition) => ProcessDefinition(_definition, true); 
 
         public static void Uninstall(string _definition) => ProcessDefinition(_definition, false);
@@ -41,8 +43,6 @@ namespace Mercury
 
         public static void CreateScriptableObject<T>(string _subFolder = "") where T : ScriptableObject
         {
-            const string mercuryResourcesPath = "Assets/Plugins/_Mercury/Resources/";
-
             string subFolderString = string.IsNullOrEmpty(_subFolder) ? string.Empty : _subFolder + "/";
             string path = mercuryResourcesPath + subFolderString;
 
