@@ -22,17 +22,17 @@ namespace Mercury
         #region CREATE DATABASES
         #if MERCURY_LOCALNOTIFICATIONS
         [MenuItem("Tools/Mercury ֎/Create Database/Local Notifications")]
-        public static void CreateLocalNotificationDatabase() => MercuryInstaller.CreateScriptableObject<LocalNotifications.LocalNotificationsDatabaseSO>();
+        public static void CreateLocalNotificationDatabase() => MercuryInstaller.CreateScriptableObject<LocalNotifications.LocalNotificationsDatabaseSO>(MercuryLibrarySO.Instance.Module_LocalNotifications.Name);
         #endif
         
         #if MERCURY_INTERNETCONNECTIVITY
         [MenuItem("Tools/Mercury ֎/Create Database/Internet Connectivity")]
-        public static void CreateInternetConnectivityDatabase() => MercuryInstaller.CreateScriptableObject<InternetConnectivity.InternetConnectivityDatabaseSO>();
+        public static void CreateInternetConnectivityDatabase() => MercuryInstaller.CreateScriptableObject<InternetConnectivity.InternetConnectivityDatabaseSO>(MercuryLibrarySO.Instance.Module_InternetConnectivity.Name);
         #endif
         
         #if MERCURY_SCENEMANAGEMENT
         [MenuItem("Tools/Mercury ֎/Create Database/Scene Management")]
-        public static void CreateSceneManagementDatabase() => MercuryInstaller.CreateScriptableObject<SceneManagement.SceneManagementDatabaseSO>();
+        public static void CreateSceneManagementDatabase() => MercuryInstaller.CreateScriptableObject<SceneManagement.SceneManagementDatabaseSO>(MercuryLibrarySO.Instance.Module_SceneManagement.Name);
         #endif
         #endregion
         

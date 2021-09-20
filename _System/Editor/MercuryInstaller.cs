@@ -39,9 +39,13 @@ namespace Mercury
             PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, defineBuffer);
         }
 
-        public static void CreateScriptableObject<T>() where T : ScriptableObject
+        public static void CreateScriptableObject<T>(string _subFolder = "") where T : ScriptableObject
         {
-            const string path = "Assets/Plugins/_Mercury/Resources/";
+            const string mercuryResourcesPath = "Assets/Plugins/_Mercury/Resources/";
+
+            string subFolderString = string.IsNullOrEmpty(_subFolder) ? string.Empty : _subFolder + "/";
+            string path = mercuryResourcesPath + subFolderString;
+
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
             string fullPath = $"{path}{typeof(T).Name}.asset";
@@ -53,10 +57,7 @@ namespace Mercury
             AssetDatabase.Refresh();
         }
 
-        static MercuryInstaller()
-        {
-            CreateScriptableObject<MercuryLibrarySO>();
-        }
+        static MercuryInstaller() => CreateScriptableObject<MercuryLibrarySO>();
 
         #region PACKAGE UPDATER
         private static AddRequest updateRequest;
