@@ -26,6 +26,8 @@ namespace Mercury.LocalNotifications
         public bool ProcessesEnabled;
         [PropertyTooltip(""), TitleGroup("Global Settings"), BoxGroup("Global Settings/Specific Features"), LabelText("Enemy Connected Enabled: "), LabelWidth(200)]
         public bool EnemyConnectedEnabled;
+        [PropertyTooltip("Color for notification icon (Android only)"), TitleGroup("Global Settings"), LabelWidth(200)]
+        public Color NotificationIconColor = Color.black;
 
         // CHANNELS
         [PropertyTooltip(""), TabGroup("Tabs", "Channels"), TitleGroup("Tabs/Channels/Settings"), GUIColor("@MercuryLibrarySO.Color_Violet"), LabelText("Redirect All To Default Channel: "), LabelWidth(200)]

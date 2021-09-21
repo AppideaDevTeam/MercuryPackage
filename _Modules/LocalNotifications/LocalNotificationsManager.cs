@@ -90,6 +90,7 @@ namespace Mercury.LocalNotifications
                             Data          = $"{NotificationType.Periodic}:{notificationInfo.Period}",
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
+                            IconColor     = Database.NotificationIconColor,
                             FireTimeDelay = notificationInfo.FireTime,
                             ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_PeriodicRewards.ID
                         };
@@ -142,6 +143,7 @@ namespace Mercury.LocalNotifications
                             Data          = $"{NotificationType.FreeResources}:{notificationInfo.Identifier}",
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfoData),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfoData),
+                            IconColor     = Database.NotificationIconColor,
                             FireTimeDelay = notificationInfo.FireTime,
                             ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_FreeResources.ID
                         };
@@ -247,6 +249,7 @@ namespace Mercury.LocalNotifications
                     Data          = $"{NotificationType.EnemyConnected}:{_names[i]}",
                     IconSmall     = editorData.EditorData.iconSmall,
                     IconLarge     = editorData.EditorData.iconLarge,
+                    IconColor     = Database.NotificationIconColor,
                     FireTimeDelay = scheduledTimes[i],
                     ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_EnemyConnected.ID
                 };
@@ -312,6 +315,7 @@ namespace Mercury.LocalNotifications
                             Data          = $"{NotificationType.Processed}:{notificationInfo.Identifier}",
                             IconSmall     = ProcessBufferTaggedData(txt.EditorData.iconSmall, notificationInfo.Data),
                             IconLarge     = ProcessBufferTaggedData(txt.EditorData.iconLarge, notificationInfo.Data),
+                            IconColor     = Database.NotificationIconColor,
                             FireTimeDelay = notificationInfo.FireTime,
                             ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_Processes.ID
                         };
@@ -383,6 +387,7 @@ namespace Mercury.LocalNotifications
                         Data          = $"{NotificationType.Reminder}:{_dayIndex}",
                         IconSmall     = notificationIconSmall,
                         IconLarge     = notificationIconLarge,
+                        IconColor     = Database.NotificationIconColor,
                         FireTimeDelay = fireTimeDelay,
                         ChannelID     = Database.RedirectAllToDefaultChannel ? Database.Channel_Default.ID : Database.Channel_Reminders.ID
                     };
