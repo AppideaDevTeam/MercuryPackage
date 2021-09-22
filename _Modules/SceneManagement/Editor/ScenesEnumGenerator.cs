@@ -22,7 +22,7 @@ public static class ScenesEnumGenerator
         return scenes;
     }
     
-    public static void ExampleScript()
+    public static void GenerateEnums()
     {
         string enumContainerPath = MercuryInstaller.mercuryResourcesPath + MercuryLibrarySO.Instance.Module_SceneManagement.Name + "/" + sceneEnumContainerAssetName + ".cs";
 
@@ -74,17 +74,21 @@ public static class ScenesEnumGenerator
     private static string GenerateEnumStringData(string[] _enumEntries)
     {
         string body = "#if MERCURY_SCENEMANAGEMENT";
-        body += "\n // Use INSTEAD Tools/Appidea/UpdateScenesEnum to update this enum";
-        body += "\n public enum " + enumName;
-        body += "\n {";
+        body += "\n";
+        body += "\n// Use MERCURY CONTROL PANEL to update this enum";
+        body += "\nnamespace Mercury.SceneManagement \n{";
+        body += "\n    public enum " + enumName;
+        body += "\n    {";
         
         for( int i = 0; i < _enumEntries.Length; i++ )
         {
-            body += "\n" + "\t" + _enumEntries[i] + ",";
+            body += "\n    " + "\t" + _enumEntries[i];
+            if(i != _enumEntries.Length - 1) body += ",";
         }
         
-        body += "\n }";
-        body += "\n #endif";
+        body += "\n    }";
+        body += "\n}";
+        body += "\n#endif";
 
         return body;
     }
