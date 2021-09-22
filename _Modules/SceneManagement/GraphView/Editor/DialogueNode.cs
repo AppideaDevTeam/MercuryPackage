@@ -1,6 +1,6 @@
 using UnityEditor.Experimental.GraphView;
 
-namespace Mercury
+namespace Mercury.SceneManagement
 {
     public class DialogueNode : Node
     {
