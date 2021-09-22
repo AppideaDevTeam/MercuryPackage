@@ -19,9 +19,6 @@
     "email": "maroon3d@gmail.com",
     "url": "https://www.unity3d.com"
   },
-  "hideInEditor": false,
-  "repository": {
-    "url": "https://github.com/AppideaDevTeam/MercuryPackage.git",
-    "type": "git"
-  }
+  "type": "library",
+  "hideInEditor": false
 }
