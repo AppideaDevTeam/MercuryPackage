@@ -1,14 +1,18 @@
 #if MERCURY_SCENEMANAGEMENT
 using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace Mercury.SceneManagement
 {
     public enum SceneType
     {
+        None,
         Boot,
         LoadingScreen,
-        ScriptsOnly,
+        Helper,
         Menu,
+        Lobby,
         Gameplay,
         Overlay
     }
@@ -16,13 +20,21 @@ namespace Mercury.SceneManagement
     [Serializable]
     public class SceneData
     {
-        public Scenes Scene;
+        [ReadOnly] public string Scene;
         public SceneType Type;
-        
-        public SceneData(Scenes _scene)
+        //[TableColumnWidth(80, Resizable = false)] public bool Standalone = true;
+
+        public SceneData(string _scene)
         {
             Scene = _scene;
         }
+    }
+
+    [Serializable]
+    public class Transition
+    {
+        public SceneType TransitionTarget;
+        public bool LoadAsAsync;
     }
 }
 #endif

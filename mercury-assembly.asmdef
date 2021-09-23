@@ -2,7 +2,6 @@
     "name": "mercury-assembly",
     "rootNamespace": "Mercury",
     "references": [
-        "GUID:e4b12a5fe70a8f5478ce3efeab3a4c2a",
         "GUID:ac145e6b8c6034cdbadc8c6e26aedbcf",
         "GUID:1e8e55397bd004beaba78a667566665f"
     ],

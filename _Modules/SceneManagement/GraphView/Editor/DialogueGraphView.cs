@@ -114,8 +114,8 @@ namespace Mercury.SceneManagement
         {
             Port generatedPort = GeneratePort(_dialogueNode, Direction.Output);
 
-            Label oldLabel = generatedPort.contentContainer.Q<Label>("type");
-            generatedPort.contentContainer.Remove(oldLabel);
+            //Label oldLabel = generatedPort.contentContainer.Q<Label>("type");
+            //generatedPort.contentContainer.Remove(oldLabel);
             
             var outputPortCount = _dialogueNode.outputContainer.Query("connector").ToList().Count();
             var choicePortName  = string.IsNullOrEmpty(_overridenPortName) ? $"Choice {outputPortCount}" : _overridenPortName;
