@@ -234,7 +234,7 @@ namespace Mercury.InternetConnectivity
             if (!TimeInfo.WasFetched) return DateTime.Now;
         
             TimeSpan deltaTime = TimeSpan.FromSeconds(Time.realtimeSinceStartup - TimeInfo.LastFetchTime);
-            return TimeInfo.DateTime.Add(deltaTime);
+            return TimeInfo.DateTime.AddTicks(Math.Abs(deltaTime.Ticks));
         }
         #endregion
 
