@@ -1,4 +1,6 @@
-﻿#if MERCURY_LOCALNOTIFICATIONS
+﻿using UnityEngine;
+
+#if MERCURY_LOCALNOTIFICATIONS
 
 namespace Mercury.LocalNotifications
 {
@@ -10,6 +12,7 @@ namespace Mercury.LocalNotifications
         #region ANDROID SPECIFIC
         public string IconSmall;
         public string IconLarge;
+        public Color IconColor;
         
         public string ChannelID;
         #endregion
@@ -17,6 +20,7 @@ namespace Mercury.LocalNotifications
         public string Data;
         
         public System.TimeSpan FireTimeDelay;
+
     }
 }
 #endif

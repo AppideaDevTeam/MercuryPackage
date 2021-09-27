@@ -22,7 +22,8 @@ namespace Mercury.LocalNotifications
                 Title = _notification.Title,
                 Text = _notification.Text,
                 FireTime = DateTime.Now.Add(_notification.FireTimeDelay),
-                ShowTimestamp = true
+                ShowTimestamp = true,
+                Color = _notification.IconColor
             };
 
             string targetChannelID = string.IsNullOrEmpty(_notification.ChannelID) ? MercuryLibrarySO.LocalNotificationsDatabase.Channel_Default.ID : _notification.ChannelID;
