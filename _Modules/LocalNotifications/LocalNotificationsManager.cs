@@ -490,18 +490,26 @@ namespace Mercury.LocalNotifications
 
             if (!string.IsNullOrEmpty(_rawData))
             {
-                if (_rawData.Contains(':'))
+                try
                 {
-                    string[] splits = _rawData.Split(new string[] { ":" }, 2, StringSplitOptions.None);
+                    string separator = ":";
+                    
+                    if (_rawData.Contains(separator) && !_rawData.StartsWith(separator) && !_rawData.EndsWith(separator))
+                    {
+                        string[] splits = _rawData.Split(new[] { ':' }, 2);
 
-                    string typeText = splits[0];
-                    string dataText = splits[1];
+                        string typeText = splits[0];
+                        string dataText = splits[1];
 
-                    Type = (NotificationType)Enum.Parse(typeof(NotificationType), typeText, true);
-                    Data = dataText;
+                        Type = (NotificationType)Enum.Parse(typeof(NotificationType), typeText, true);
+                        Data = dataText;
+                    }
+                    else
+                        Data = _rawData;
+                    
+                    HasIntent = true;
                 }
-                else
-                    Data = _rawData;
+                catch (Exception _) { }
             }
         }
     }
