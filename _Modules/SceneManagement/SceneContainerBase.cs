@@ -3,6 +3,8 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine.SceneManagement;
 
+#if MERCURY_SCENEMANAGEMENT
+
 public abstract class SceneContainerBase<EnumType> : SerializedScriptableObject
 {
     [OdinSerialize] [TableList] private Dictionary<EnumType, Scene> enumToSceneDictionary = new Dictionary<EnumType, Scene>();
@@ -19,3 +21,5 @@ public abstract class SceneContainerBase<EnumType> : SerializedScriptableObject
         }
     }
 }
+
+#endif
